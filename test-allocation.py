@@ -1,94 +1,277 @@
 
-import sys, re, random
+from ast import walk
+import sys, re, random, time
+from os import walk
 
-def readInstance():
-    if(len(sys.argv) > 1):
+_numDesks = 0
+_numDistances = 0
+_numTests = 0
+_numEmptyDesks = 0
+_desks = []
+_tests = []
+_distanceMatrix = []
+_similarityMatrix = []
+_solution = []
+
+
+def readInstance(instance = False):
+    global _numDesks, _numDistances, _numTests, _numEmptyDesks, _desks, _tests, _distanceMatrix, _similarityMatrix
+
+    if instance:
+        file = open(instance)
+    elif(len(sys.argv) > 1):
         file = open(sys.argv[1])
     else:
-        file = open('instances/lab6b_2x20.txt')
+        file = open('instances/lab3_2x0.txt')
+        # file = open('instances/lab6b_2x20.txt')
         
     lines = file.readlines()
     sub = re.sub(' +', ' ', re.sub('\n', '', re.sub('\t', ' ', lines[0])));
     instanceParts = sub.split(' ')
 
-    numDesks = int(instanceParts[0])
-    numDistances = int(instanceParts[1])
-    numTests = int(instanceParts[2])
-    numEmptyDesks = int(instanceParts[3])
+    _numDesks = int(instanceParts[0])
+    _numDistances = int(instanceParts[1])
+    _numTests = int(instanceParts[2])
+    _numEmptyDesks = int(instanceParts[3])
 
     countLines = 0
-    desks = []
+    _desks = []
 
-    while(countLines < numDesks):
-        desks.append(int(lines[countLines + 1]))
+    while(countLines < _numDesks):
+        _desks.append(int(lines[countLines + 1]))
         countLines += 1
 
-    distanceMatrix = createMatrix(numDesks, numDesks, None)
+    _distanceMatrix = createMatrix(_numDesks, _numDesks, 0)
 
     countLines += 1
 
-    while(countLines < (numDistances + numDesks + 1)):
+    while(countLines < (_numDistances + _numDesks + 1)):
         currentLine = lines[countLines]
-        lineParts = re.sub(' +', ' ', re.sub('\n', '', re.sub('\t', '', currentLine))).split(' ');
-        i = desks.index(int(lineParts[0]))
-        j = desks.index(int(lineParts[1]))
+        lineParts = re.sub('\n', '', re.sub('\t', ' ', currentLine)).split(' ');
+        i = _desks.index(int(lineParts[0]))
+        j = _desks.index(int(lineParts[1]))
         value = float(lineParts[2])
-        distanceMatrix[i][j] = value
+        _distanceMatrix[i][j] = value
         countLines += 1
 
-    similarityMatrix = createMatrix(numTests, numTests)
+    _similarityMatrix = createMatrix(_numTests, _numTests)
 
-    while(countLines < numDistances + numDesks + 1 + (numTests * 2)):
+    while(countLines < _numDistances + _numDesks + 1 + (_numTests * 2)):
         currentLine = lines[countLines]
-        lineParts = re.sub(' +', ' ', re.sub('\n', '', re.sub('\t', '', currentLine))).split(' ');
+
+        lineParts = re.sub('\n', '', re.sub('\t', ' ', currentLine)).split(' ');
+        if len(lineParts) > 3:
+            lineParts = re.sub(' +', ' ', re.sub('\n', '', re.sub('\t', ' ', currentLine))).split(' ');
         i = int(lineParts[0])
         j = int(lineParts[1])
         value = float(lineParts[2])
-        similarityMatrix[i][j] = value
+        _similarityMatrix[i][j] = value
         countLines += 1
-
-    return desks, numDistances, numTests, numEmptyDesks, distanceMatrix, similarityMatrix
 
 def createMatrix(lines, columns, defValue = 0):
     matrix = []
     for i in range(lines):
         line = []
         for j in range(columns):
-            line.append(0)
+            line.append(defValue)
         matrix.append(line)
     return matrix
 
-def solucaoInicial(desks, numTests, numEmptyDesks):
-    solution = []
-    for i in range(len(desks)):
-        solution.append(0)
+def closestDesk(desk):
+    distance = 0
+    closest = 1
 
-    while solution.count(0) > numEmptyDesks:
-        solution[random.randint(0, len(desks) - 1)] = random.randint(1, numTests)
-
-    return solution
+    for i in range(len(_distanceMatrix)):
+        for j in range(i, len(_distanceMatrix)):
+            if _distanceMatrix[i][j] != 0 and _distanceMatrix[i][j] > distance and  (i == desk or j == desk):
+                distance = _distanceMatrix[i][j]
+                if i == desk:
+                    closest = j
+                else:
+                    closest = i
+                
+            if distance == 1:
+                break
             
-        
-def avaliaSolucao(distanceMatrix, similarityMatrix, solution):
-    totalCost = 0
-    for i in range(len(solution) - 1):
-        for j in range(i + 1, len(solution)):
-            if(solution[i] != 0 and solution[j] != 0):
-                totalCost += similarityMatrix[solution[i] - 1][solution[j] - 1] * distanceMatrix[i][j]
+        if distance == 1:
+            break
 
-    
+    return closest
+
+
+def lessSimilarTest(test):
+    similarity = 1
+    bestTest = 1
+    for i in range(len(_similarityMatrix)):
+        for j in range(len(_similarityMatrix)):
+            if _similarityMatrix[i][j] != 0 and _similarityMatrix[i][j] < similarity and (i == test or j == test):
+                similarity = _similarityMatrix[i][j]
+                if i == test:
+                    bestTest = j
+                else:
+                    bestTest = i
+
+
+    return bestTest
+
+def avaliaSolucao(sol):
+    totalCost = 0
+    for i in range(len(_distanceMatrix)):
+        #Considera apenas os elementos acima da diagonal principal
+        for j in range(i, len(_distanceMatrix)):
+            if _distanceMatrix[i][j] > 0:
+                indexT1 = sol[i]
+                indexT2 = sol[j]
+                #Inverte os indices das similaridades quando necessário, já que a matriz de similaridades Sij i <= j
+                if indexT2 < indexT1:
+                    indexT1 = indexT1 + indexT2
+                    indexT2 = indexT1 - indexT2
+                    indexT1 = indexT1 - indexT2
+
+                totalCost += _similarityMatrix[indexT1][indexT2] * _distanceMatrix[i][j]
+
     return totalCost
 
+def heuristicaConstrutiva1():
+    global _solution
+    _solution = []
+    for i in range(len(_desks)):
+        _solution.append(0)
 
-def buscaLocal():
-    desks, numDistances, numTests, numEmptyDesks, distanceMatrix, similarityMatrix = readInstance()
-    solucaoAtual = solucaoInicial(desks, numTests, numEmptyDesks)
-    print(avaliaSolucao(distanceMatrix, similarityMatrix, solucaoAtual))
+    for i in range(len(_desks) - _numEmptyDesks):
+        _solution[i] = random.randint(1, _numTests - 1)  
+
+def heuristicaConstrutiva2(): 
+    global _solution  
+    _solution = []
+    #inicia com tudo vazio
+    for i in range(len(_desks)):
+        _solution.append(0)
+
+    #Para cada indice da solução
+    for i in range(len(_solution)):
+        if(_solution.count(0) > _numEmptyDesks):
+            #O primeiro sempre atribui o teste 1
+            if i == 0:
+                _solution[i] = 1
+            else:
+                #Nos próximos, busca o indice da carteira mais proxima
+                closest = closestDesk(i) 
+
+                closestTest = _solution[closest]
+
+                #Atribui no indice atual o teste que tem menos similaridade com a carteira mais proxima
+                _solution[i] = lessSimilarTest(closestTest)
+
+
+def modificaSolucaoSwapAleatorio(solucao):
+    index1 = 0;
+    index2 = 0;
+    while index1 == index2:
+        index1 = random.randint(0, len(solucao) - 1)
+        index2 = random.randint(0, len(solucao) - 1)
+    aux = solucao[index1];
+    solucao[index1] = solucao[index2]
+    solucao[index2] = aux
+
+    return solucao
+
+def modificaSolucaoSwapIndices(solucao, a, b):
+    aux = solucao[a]
+    solucao[a] = solucao[b]
+    solucao[b] = aux
+    return solucao
+
+def caminhadaAleatoria():
+    readInstance()
+    heuristicaConstrutiva1()
+    bestValue = 0
+    solucaoConcumbente = _solution
+    valueConcumbente = avaliaSolucao(_solution)
+
+    for i in range(10000):
+        newSolution = modificaSolucaoSwapAleatorio(solucaoConcumbente)
+        value = avaliaSolucao(newSolution)
+        if value < valueConcumbente:
+            bestValue = value
+            solucaoConcumbente = newSolution
+
+    print(valueConcumbente)
+    print(bestValue)
 
 
 
-buscaLocal()
+def buscaLocalPrimeiraMelhora():
+    readInstance()
+    heuristicaConstrutiva1()
+    valueConcumbente = avaliaSolucao(_solution)
+    solucao = _solution
+    bestValue = 0
+    stop = False
+    for i in range(len(_solution)):
+        for j in range(i + 1, len(_solution)):
+            newSol = modificaSolucaoSwapIndices(solucao, i, j,)
+            value = avaliaSolucao(newSol)
+            if value < valueConcumbente:
+                stop = True
+                solucao = newSol
+                bestValue = value
+                break
+        if stop:
+            break
 
+    print(valueConcumbente)
+    print(bestValue)
+
+def buscaLocalMelhorMelhora():
+    readInstance()
+    heuristicaConstrutiva1()
+    valueConcumbente = avaliaSolucao(_solution)
+    bestValue = valueConcumbente
+    solucaoConcumbente = _solution
+    stop = False
+    cont =0
+    for i in range(len(_solution)):
+        for j in range(i + 1, len(_solution)):
+            newSol = modificaSolucaoSwapIndices(solucaoConcumbente, i, j,)
+            value = avaliaSolucao(newSol)
+            cont += 1
+            if value < bestValue:
+                solucaoConcumbente = newSol
+                bestValue = value
+
+    print(valueConcumbente)
+    print(bestValue)
+    print(cont)
+
+    
+
+buscaLocalPrimeiraMelhora()
+buscaLocalMelhorMelhora()
+
+
+
+
+# f = []
+# for (dirpath, dirnames, filenames) in walk('instances/'):
+#     f.extend(filenames)
+#     break
+
+# for ff in f:
+#     readInstance('instances/' + ff)
+#     solucaoInicial()
+#     print(_solution)
+#     caminhadaAleatoria()
+
+
+
+# heuristicaConstrutiva2()
+# print(_solution)
+
+# _desks, _numDistances, _numTests, _numEmptyDesks, _distanceMatrix, _similarityMatrix = readInstance()
+# print(closestDesk(_distanceMatrix, 22))
+# print(_distanceMatrix[2][3])
+# print(_similarityMatrix)
 
 
 
