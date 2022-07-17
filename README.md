@@ -2,13 +2,13 @@
 Repositório para o trabalho da Diciplina 55MQU - UDESC
 
 
-Modificação de soluções:
-• busca local randomizada
-• busca tabu
+### Modificação de soluções:
+- busca local randomizada
+- busca tabu
 
-Construção de soluções:
-• construção repetida
-• algoritmos semi-gulosos: guloso-k e guloso-α
+### Construção de soluções:
+- construção repetida
+- algoritmos semi-gulosos: guloso-k e guloso-α
 
-Pesquisa por fora:
-Algoritmos genéticos
+### Pesquisa Extra
+- Algoritmos genéticos
