@@ -17,6 +17,16 @@ _solution = []
 def readInstance(instance = False):
     global _numDesks, _numDistances, _numTests, _numEmptyDesks, _desks, _tests, _distanceMatrix, _similarityMatrix
 
+    _numDesks = 0
+    _numDistances = 0
+    _numTests = 0
+    _numEmptyDesks = 0
+    _desks = []
+    _tests = []
+    _distanceMatrix = []
+    _similarityMatrix = []
+    _solution = []
+
     if instance:
         file = open(instance)
     elif(len(sys.argv) > 1):
@@ -182,6 +192,21 @@ def modificaSolucaoSwapIndices(solucao, a, b):
     solucao[b] = aux
     return solucao
 
+def doHeuristica1():
+    readInstance()
+    heuristicaConstrutiva1()
+    print('\nHeurística Construtiva I')
+    print('value ' + str("%0.2f" % avaliaSolucao(_solution)))
+    print('-----------------------')
+
+def doHeuristica2():
+    readInstance()
+    heuristicaConstrutiva2()
+    print('\nHeurística Construtiva II')
+    print('value ' + str("%0.2f" % avaliaSolucao(_solution)))
+    print('-----------------------')
+
+
 def caminhadaAleatoria():
     readInstance()
     heuristicaConstrutiva1()
@@ -196,8 +221,10 @@ def caminhadaAleatoria():
             bestValue = value
             solucaoConcumbente = newSolution
 
-    print(valueConcumbente)
-    print(bestValue)
+    print('\nCaminhada aleatória')
+    print('initial - ' + str("%0.2f" % valueConcumbente))
+    print('value - ' + str("%0.2f" % bestValue))
+    print('-----------------------')
 
 
 
@@ -220,8 +247,10 @@ def buscaLocalPrimeiraMelhora():
         if stop:
             break
 
-    print(valueConcumbente)
-    print(bestValue)
+    print('\nBusca Local - Primeira melhora')
+    print('initial - ' + str("%0.2f" % valueConcumbente))
+    print('value - ' + str("%0.2f" % bestValue))
+    print('-----------------------')
 
 def buscaLocalMelhorMelhora():
     readInstance()
@@ -240,12 +269,15 @@ def buscaLocalMelhorMelhora():
                 solucaoConcumbente = newSol
                 bestValue = value
 
-    print(valueConcumbente)
-    print(bestValue)
-    print(cont)
-
+    print('\nBusca Local - Melhor melhora')
+    print('initial - ' + str("%0.2f" % valueConcumbente))
+    print('value - ' + str("%0.2f" % bestValue))
+    print('-----------------------')
     
 
+doHeuristica1()
+doHeuristica2()
+caminhadaAleatoria()
 buscaLocalPrimeiraMelhora()
 buscaLocalMelhorMelhora()
 
