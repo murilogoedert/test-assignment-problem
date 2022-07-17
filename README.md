@@ -9,6 +9,7 @@ Repositório para o trabalho da Diciplina 55MQU - UDESC
 ### Construção de soluções:
 - construção repetida
 - algoritmos semi-gulosos: guloso-k e guloso-α
+- Reinicio Aleatório (Multistart)
 
 ### Pesquisa Extra
 - Algoritmos genéticos
