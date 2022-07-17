@@ -249,6 +249,8 @@ def buscaLocalMelhorMelhora():
 buscaLocalPrimeiraMelhora()
 buscaLocalMelhorMelhora()
 
+#teste
+
 
 
 
