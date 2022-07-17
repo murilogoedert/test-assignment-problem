@@ -1,5 +1,6 @@
 
 from ast import walk
+from operator import index
 import sys, re, random, time
 from os import walk
 
@@ -12,6 +13,8 @@ _tests = []
 _distanceMatrix = []
 _similarityMatrix = []
 _solution = []
+
+_iterations = 70
 
 
 def readInstance(instance = False):
@@ -32,8 +35,8 @@ def readInstance(instance = False):
     elif(len(sys.argv) > 1):
         file = open(sys.argv[1])
     else:
-        file = open('instances/lab3_2x0.txt')
-        # file = open('instances/lab6b_2x20.txt')
+        # file = open('instances/lab3_2x0.txt')
+        file = open('instances/lab6b_2x20.txt')
         
     lines = file.readlines()
     sub = re.sub(' +', ' ', re.sub('\n', '', re.sub('\t', ' ', lines[0])));
@@ -124,6 +127,13 @@ def lessSimilarTest(test):
 
     return bestTest
 
+def chooseTest(test):
+    testToChoose = test
+    while testToChoose == test:
+        testToChoose = random.randint(1, _numTests - 1)
+    
+    return testToChoose
+
 def avaliaSolucao(sol):
     totalCost = 0
     for i in range(len(_distanceMatrix)):
@@ -175,8 +185,8 @@ def heuristicaConstrutiva2():
 
 
 def modificaSolucaoSwapAleatorio(solucao):
-    index1 = 0;
-    index2 = 0;
+    index1 = 0
+    index2 = 0
     while index1 == index2:
         index1 = random.randint(0, len(solucao) - 1)
         index2 = random.randint(0, len(solucao) - 1)
@@ -191,6 +201,33 @@ def modificaSolucaoSwapIndices(solucao, a, b):
     solucao[a] = solucao[b]
     solucao[b] = aux
     return solucao
+
+def modificaSolucaoSwapVantajoso(solucao):
+    trocou = False
+    initialValue = avaliaSolucao(solucao)
+    solucaoConcumbente = solucao
+    for i in range(_iterations):
+        solucaoConcumbente = modificaSolucaoSwapAleatorio(solucaoConcumbente)
+        value = avaliaSolucao(solucaoConcumbente)
+        if value < initialValue:
+            return solucaoConcumbente
+
+    return solucaoConcumbente
+
+def modificaSolucaoTrocaTeste(solucao, index):
+    test = solucao[index]
+    while(test == solucao[index]):
+        test = random.randint(1, _numTests - 1)
+
+    solucao[index] = test
+
+    return solucao, test
+
+    
+
+def criaSolucaoInicial():
+    heuristicaConstrutiva1()
+
 
 def doHeuristica1():
     readInstance()
@@ -209,12 +246,12 @@ def doHeuristica2():
 
 def caminhadaAleatoria():
     readInstance()
-    heuristicaConstrutiva1()
+    criaSolucaoInicial()
     bestValue = 0
     solucaoConcumbente = _solution
     valueConcumbente = avaliaSolucao(_solution)
 
-    for i in range(10000):
+    for i in range(_iterations):
         newSolution = modificaSolucaoSwapAleatorio(solucaoConcumbente)
         value = avaliaSolucao(newSolution)
         if value < valueConcumbente:
@@ -230,7 +267,7 @@ def caminhadaAleatoria():
 
 def buscaLocalPrimeiraMelhora():
     readInstance()
-    heuristicaConstrutiva1()
+    criaSolucaoInicial()
     valueConcumbente = avaliaSolucao(_solution)
     solucao = _solution
     bestValue = 0
@@ -254,12 +291,12 @@ def buscaLocalPrimeiraMelhora():
 
 def buscaLocalMelhorMelhora():
     readInstance()
-    heuristicaConstrutiva1()
+    criaSolucaoInicial()
     valueConcumbente = avaliaSolucao(_solution)
     bestValue = valueConcumbente
     solucaoConcumbente = _solution
     stop = False
-    cont =0
+    cont = 0
     for i in range(len(_solution)):
         for j in range(i + 1, len(_solution)):
             newSol = modificaSolucaoSwapIndices(solucaoConcumbente, i, j,)
@@ -273,44 +310,82 @@ def buscaLocalMelhorMelhora():
     print('initial - ' + str("%0.2f" % valueConcumbente))
     print('value - ' + str("%0.2f" % bestValue))
     print('-----------------------')
+
+def buscaLocalRandomizada():
+    readInstance()
+    criaSolucaoInicial()
+    valueConcumbente = avaliaSolucao(_solution)
+    initialValue = valueConcumbente
+    solutionConcumbente = _solution
+    for i in range(_iterations):
+        if random.randint(0,1) == 0:
+            solution = modificaSolucaoSwapAleatorio(solutionConcumbente)
+        else:
+            solution = modificaSolucaoSwapVantajoso(solutionConcumbente)
+        
+        value = avaliaSolucao(solution)
+        if value < valueConcumbente:
+            valueConcumbente = value
+            solutionConcumbente = solution
+
+    print('\nBusca Local Randomizada')
+    print('initial - ' + str("%0.2f" % initialValue))
+    print('value - ' + str("%0.2f" % valueConcumbente))
+    print('-----------------------')
+
+def atualizaTabu(tabuTable):
+    for i in range(len(tabuTable)):
+        for j in range(len(tabuTable)):
+            if tabuTable[i][j] > 0:
+                tabuTable[i][j] = tabuTable[i][j] - 1
+    
+    return tabuTable
+
+
+def buscaTabu():
+    readInstance()
+    criaSolucaoInicial()
+    tabuTable = createMatrix(_numDesks, _numDesks)
+    initialValue = avaliaSolucao(_solution)
+    bestValue = initialValue
+    tabuIterations = 5
+    solucaoConcumbente = _solution
+
+    for iter in range(_iterations):
+        for i in range(len(_solution)):
+            for j in range(len(_solution)):
+                solucao = modificaSolucaoSwapIndices(solucaoConcumbente, i, j)
+                tabu = False
+                if tabuTable[i][j] == 0:
+                    solucaoConcumbente = solucao
+                else:
+                    print('tabu!')
+                    tabu = True
+            
+                tabuTable = atualizaTabu(tabuTable)
+                value = avaliaSolucao(solucao)
+                if value < bestValue and not tabu:
+                    bestValue = value
+                    tabuTable[i][j] = tabuIterations
+
+    print('\nBusca Tabu')
+    print('initial - ' + str("%0.2f" % initialValue))
+    print('value - ' + str("%0.2f" % bestValue))
+    print('-----------------------')
+        
     
 
+#Etapa II
 doHeuristica1()
 doHeuristica2()
 caminhadaAleatoria()
 buscaLocalPrimeiraMelhora()
 buscaLocalMelhorMelhora()
 
-#teste
+#Etapa III
 
+#Modificação de Soluções
+buscaLocalRandomizada()
+buscaTabu()
 
-
-
-# f = []
-# for (dirpath, dirnames, filenames) in walk('instances/'):
-#     f.extend(filenames)
-#     break
-
-# for ff in f:
-#     readInstance('instances/' + ff)
-#     solucaoInicial()
-#     print(_solution)
-#     caminhadaAleatoria()
-
-
-
-# heuristicaConstrutiva2()
-# print(_solution)
-
-# _desks, _numDistances, _numTests, _numEmptyDesks, _distanceMatrix, _similarityMatrix = readInstance()
-# print(closestDesk(_distanceMatrix, 22))
-# print(_distanceMatrix[2][3])
-# print(_similarityMatrix)
-
-
-
-
-#  python .\test-allocation.py instances/lab1_2x10.txt 
-
-
-    
+#Construção de Soluções
