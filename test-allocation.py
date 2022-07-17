@@ -3,6 +3,9 @@ from ast import walk
 from operator import index
 import sys, re, random, time
 from os import walk
+from turtle import update
+
+from numpy import array
 
 _numDesks = 0
 _numDistances = 0
@@ -14,7 +17,7 @@ _distanceMatrix = []
 _similarityMatrix = []
 _solution = []
 
-_iterations = 70
+_iterations = 100
 
 
 def readInstance(instance = False):
@@ -152,14 +155,18 @@ def avaliaSolucao(sol):
 
     return totalCost
 
-def heuristicaConstrutiva1():
+def heuristicaConstrutiva1(allowEmpty = True):
     global _solution
     _solution = []
-    for i in range(len(_desks)):
-        _solution.append(0)
+    if allowEmpty:
+        for i in range(len(_desks)):
+            _solution.append(0)
 
-    for i in range(len(_desks) - _numEmptyDesks):
-        _solution[i] = random.randint(1, _numTests - 1)  
+        for i in range(len(_desks) - _numEmptyDesks):
+            _solution[i] = random.randint(1, _numTests - 1)  
+    else:
+        for i in range(len(_desks)):
+            _solution.append(random.randint(1, _numTests - 1))
 
 def heuristicaConstrutiva2(): 
     global _solution  
@@ -206,7 +213,7 @@ def modificaSolucaoSwapVantajoso(solucao):
     trocou = False
     initialValue = avaliaSolucao(solucao)
     solucaoConcumbente = solucao
-    for i in range(_iterations):
+    for i in range(10):
         solucaoConcumbente = modificaSolucaoSwapAleatorio(solucaoConcumbente)
         value = avaliaSolucao(solucaoConcumbente)
         if value < initialValue:
@@ -333,59 +340,152 @@ def buscaLocalRandomizada():
     print('value - ' + str("%0.2f" % valueConcumbente))
     print('-----------------------')
 
-def atualizaTabu(tabuTable):
-    for i in range(len(tabuTable)):
-        for j in range(len(tabuTable)):
-            if tabuTable[i][j] > 0:
-                tabuTable[i][j] = tabuTable[i][j] - 1
-    
-    return tabuTable
+def orderList(el):
+    return el[1]
+
+def getScores(solution, reversed = False):
+    scores = []
+    for i in range(len(solution)):
+        if solution[i] != 0:
+            evalSol = solution.copy()
+            evalSol[i] = 0
+            scores.append((i, avaliaSolucao(evalSol)))
+
+    scores.sort(key=orderList, reverse=reversed)
+    return scores
+
+def clearDesksByScore(solution, numEmptyDesks = 0):
+    newSol = solution.copy()
+    cont = 0
+    for i in range(len(newSol)):
+        if cont < numEmptyDesks:
+            scores = getScores(newSol, reversed=False)
+            newSol[scores[0][0]] = 0
+        else:
+            break 
+        cont += 1
+
+    return newSol
+
 
 
 def buscaTabu():
-    readInstance()
-    criaSolucaoInicial()
-    tabuTable = createMatrix(_numDesks, _numDesks)
-    initialValue = avaliaSolucao(_solution)
-    bestValue = initialValue
-    tabuIterations = 5
-    solucaoConcumbente = _solution
 
-    for iter in range(_iterations):
-        for i in range(len(_solution)):
-            for j in range(len(_solution)):
-                solucao = modificaSolucaoSwapIndices(solucaoConcumbente, i, j)
-                tabu = False
-                if tabuTable[i][j] == 0:
-                    solucaoConcumbente = solucao
-                else:
-                    print('tabu!')
-                    tabu = True
-            
-                tabuTable = atualizaTabu(tabuTable)
-                value = avaliaSolucao(solucao)
-                if value < bestValue and not tabu:
-                    bestValue = value
-                    tabuTable[i][j] = tabuIterations
+    def buscaMelhorSolucaoNaoTabu(solucao:list, tabuList:list):
+        list = []
+        for i in range(len(solucao)):
+            if tabuList.count(i) == 0:
+                solTest = solucao.copy()
+                solTest[i] = 0
+                list.append((i, avaliaSolucao(solTest)))
+        
+        list.sort(key=orderList, reverse=True)
+        indiceEscolhido = list[random.randint(0, randSelectionSize - 1)][0]
+
+        bestValue = 9999999
+        bestSolution = False
+
+
+        for i in range(1, _numTests):
+            solucaoAvaliar = solucao.copy()
+            solucaoAvaliar[indiceEscolhido] = i
+            value = avaliaSolucao(solucaoAvaliar)
+            if value < bestValue:
+                bestValue = value
+                bestSolution = solucaoAvaliar
+
+        return indiceEscolhido, bestSolution
+
+    def removeDesks(solucao, qtd):
+        for i in range(len(solucao)):
+            if(solucao.count(0) < qtd):
+                solucao[i] = 0
+
+
+    def updateTabu(tabuCont:list, tabuList:list):
+        for i in range(len(tabuCont)):
+            if tabuCont[i] > 0:
+                tabuCont[i] -= 1
+
+            if tabuCont[i] == 0 and tabuList.count(i) > 0:
+                tabuList.remove(i)
+
+        return tabuCont, tabuList
+        
+
+    readInstance()
+    heuristicaConstrutiva1(allowEmpty=False)
+    solI = _solution.copy() 
+    removeDesks(solI, _numEmptyDesks)
+    initialValue = avaliaSolucao(solI)
+    bestValue = initialValue
+    bestSolution = _solution
+    solucaoAtual = _solution
+    tabuIteractions = 35
+    randSelectionSize = 6
+    totalIteracoes = 200
+    tabuList = []
+    tabuCont = [0 for i in range(_numDesks)]
+
+
+    cont = 0
+
+    while cont < totalIteracoes:
+        tabuIndex, solucaoAtual = buscaMelhorSolucaoNaoTabu(solucaoAtual, tabuList)
+        tabuList.append(tabuIndex)
+        tabuCont[tabuIndex] = tabuIteractions
+
+        cleanSolution = clearDesksByScore(solucaoAtual, _numEmptyDesks)
+        currentValue = avaliaSolucao(cleanSolution)
+        if currentValue < avaliaSolucao(bestSolution):
+            bestSolution = cleanSolution
+            bestValue = currentValue
+
+        updateTabu(tabuCont, tabuList)
+        cont += 1
 
     print('\nBusca Tabu')
     print('initial - ' + str("%0.2f" % initialValue))
     print('value - ' + str("%0.2f" % bestValue))
+    print('solution - ' + str(bestSolution))
     print('-----------------------')
         
-    
+def construcaoRepedida():
+    readInstance()
+    criaSolucaoInicial()
 
-#Etapa II
+def gulosoK():
+    return
+
+def reinicioAleatorio():
+    return
+
+# # Etapa II
 doHeuristica1()
 doHeuristica2()
 caminhadaAleatoria()
 buscaLocalPrimeiraMelhora()
 buscaLocalMelhorMelhora()
 
-#Etapa III
+# Etapa III
 
-#Modificação de Soluções
+# Modificação de Soluções
 buscaLocalRandomizada()
 buscaTabu()
+# reinicioAleatorio()
 
-#Construção de Soluções
+# #Construção de Soluções
+# construcaoRepedida()
+# gulosoK()
+
+
+#WHAAAAT???
+#.\instances\lab2_3x10.txt
+# sol = [2, 0, 1, 2, 3, 0, 0, 2, 3, 3, 0, 3, 0, 3, 2, 3, 3, 2, 1, 0, 1, 3, 3, 3, 2, 0, 2, 3, 3, 2, 3, 3, 3, 3, 0, 3, 3, 3, 3, 2, 0, 0, 2, 3, 3, 2, 2, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 2, 3, 3]
+# readInstance()
+# print(avaliaSolucao(sol))
+
+
+
+
+
