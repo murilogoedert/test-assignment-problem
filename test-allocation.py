@@ -1,9 +1,8 @@
 
-from ast import walk
-from operator import index
 import sys, re, random, time
 from os import walk
-from turtle import update
+import matplotlib.pyplot as plot
+
 
 from numpy import array
 
@@ -430,6 +429,9 @@ def buscaTabu():
 
     cont = 0
 
+    pltX = []
+    pltY = []
+
     while cont < totalIteracoes:
         tabuIndex, solucaoAtual = buscaMelhorSolucaoNaoTabu(solucaoAtual, tabuList)
         tabuList.append(tabuIndex)
@@ -440,6 +442,8 @@ def buscaTabu():
         if currentValue < avaliaSolucao(bestSolution):
             bestSolution = cleanSolution
             bestValue = currentValue
+            pltX.append(cont * 2)
+            pltY.append(bestValue)
 
         updateTabu(tabuCont, tabuList)
         cont += 1
@@ -449,6 +453,9 @@ def buscaTabu():
     print('value - ' + str("%0.2f" % bestValue))
     print('solution - ' + str(bestSolution))
     print('-----------------------')
+
+    plot.plot(pltX, pltY)
+    plot.show()
         
 def construcaoRepedida():
     readInstance()
@@ -461,16 +468,16 @@ def reinicioAleatorio():
     return
 
 # # Etapa II
-doHeuristica1()
-doHeuristica2()
-caminhadaAleatoria()
-buscaLocalPrimeiraMelhora()
-buscaLocalMelhorMelhora()
+# doHeuristica1()
+# doHeuristica2()
+# caminhadaAleatoria()
+# buscaLocalPrimeiraMelhora()
+# buscaLocalMelhorMelhora()
 
 # Etapa III
 
 # Modificação de Soluções
-buscaLocalRandomizada()
+# buscaLocalRandomizada()
 buscaTabu()
 # reinicioAleatorio()
 
@@ -480,8 +487,10 @@ buscaTabu()
 
 
 #WHAAAAT???
-#.\instances\lab2_3x10.txt
+# .\instances\lab2_3x10.txt
 # sol = [2, 0, 1, 2, 3, 0, 0, 2, 3, 3, 0, 3, 0, 3, 2, 3, 3, 2, 1, 0, 1, 3, 3, 3, 2, 0, 2, 3, 3, 2, 3, 3, 3, 3, 0, 3, 3, 3, 3, 2, 0, 0, 2, 3, 3, 2, 2, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 2, 3, 3]
+# # sool = [1, 1, 0, 1, 0, 0, 1, 1, 0, 2, 0, 1, 1, 2, 1, 0, 2, 0, 1, 1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 0, 2, 0, 0, 1, 1, 1, 2, 1, 1, 0]
+# #sol = [1, 1, 0, 1, 0, 0, 2, 1, 0, 2, 0, 1, 1, 2, 1, 0, 2, 0, 1, 1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 0, 2, 0, 0, 1, 1, 1, 2, 1, 1, 0]
 # readInstance()
 # print(avaliaSolucao(sol))
 

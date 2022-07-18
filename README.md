@@ -14,3 +14,7 @@ Repositório para o trabalho da Diciplina 55MQU - UDESC
 
 ### Pesquisa Extra
 - Algoritmos genéticos
+
+```shell
+pip install matplotlib
+```
