@@ -38,8 +38,9 @@ def readInstance(instance = False):
         file = open(sys.argv[1])
     else:
         # file = open('instances/lab3_2x0.txt')
-        file = open('instances/lab6b_2x20.txt')
+        file = open('instances/lab2_3x10.txt')
         
+    
     lines = file.readlines()
     sub = re.sub(' +', ' ', re.sub('\n', '', re.sub('\t', ' ', lines[0])));
     instanceParts = sub.split(' ')
@@ -71,7 +72,7 @@ def readInstance(instance = False):
 
     _similarityMatrix = createMatrix(_numTests, _numTests)
 
-    while(countLines < _numDistances + _numDesks + 1 + (_numTests * 2)):
+    while(countLines < len(lines)):
         currentLine = lines[countLines]
 
         lineParts = re.sub('\n', '', re.sub('\t', ' ', currentLine)).split(' ');
@@ -478,7 +479,7 @@ def reinicioAleatorio():
 
 # Modificação de Soluções
 # buscaLocalRandomizada()
-buscaTabu()
+#buscaTabu()
 # reinicioAleatorio()
 
 # #Construção de Soluções
@@ -488,11 +489,11 @@ buscaTabu()
 
 #WHAAAAT???
 # .\instances\lab2_3x10.txt
-# sol = [2, 0, 1, 2, 3, 0, 0, 2, 3, 3, 0, 3, 0, 3, 2, 3, 3, 2, 1, 0, 1, 3, 3, 3, 2, 0, 2, 3, 3, 2, 3, 3, 3, 3, 0, 3, 3, 3, 3, 2, 0, 0, 2, 3, 3, 2, 2, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 2, 3, 3]
+sol = [2, 0, 1, 2, 3, 0, 0, 2, 3, 3, 0, 3, 0, 3, 2, 3, 3, 2, 1, 0, 1, 3, 3, 3, 2, 0, 2, 3, 3, 2, 3, 3, 3, 3, 0, 3, 3, 3, 3, 2, 0, 0, 2, 3, 3, 2, 2, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 2, 3, 3]
 # # sool = [1, 1, 0, 1, 0, 0, 1, 1, 0, 2, 0, 1, 1, 2, 1, 0, 2, 0, 1, 1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 0, 2, 0, 0, 1, 1, 1, 2, 1, 1, 0]
 # #sol = [1, 1, 0, 1, 0, 0, 2, 1, 0, 2, 0, 1, 1, 2, 1, 0, 2, 0, 1, 1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 0, 2, 0, 0, 1, 1, 1, 2, 1, 1, 0]
-# readInstance()
-# print(avaliaSolucao(sol))
+readInstance()
+print(avaliaSolucao(sol))
 
 
 
