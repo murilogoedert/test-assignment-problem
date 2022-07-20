@@ -1,6 +1,6 @@
-PWD e:\projects\test-allocation-problem\docs
+PWD e:\projects\test-allocation-problem\docs\artigo
 INPUT C:\Users\vhbel\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT e:\projects\test-allocation-problem\docs\artigo.tex
+INPUT e:\projects\test-allocation-problem\docs\artigo\artigo.tex
 OUTPUT artigo.log
 INPUT C:\Users\vhbel\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\vhbel\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls

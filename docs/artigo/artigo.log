@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.7.15)  15 JUL 2022 00:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.7.15)  20 JUL 2022 00:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**e:/projects/test-allocation-problem/docs/artigo.tex
-(e:/projects/test-allocation-problem/docs/artigo.tex
+**e:/projects/test-allocation-problem/docs/artigo/artigo.tex
+(e:/projects/test-allocation-problem/docs/artigo/artigo.tex
 LaTeX2e <2022-06-01> patch level 5
 L3 programming layer <2022-07-04> (C:\Users\vhbel\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
@@ -255,7 +255,7 @@ File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 <cabecalho_sbpo.png, id=1, 1054.6903pt x 208.52907pt>
 File: cabecalho_sbpo.png Graphic file (type png)
 <use cabecalho_sbpo.png>
-Package pdftex.def Info: cabecalho_sbpo.png  used on input line 76.
+Package pdftex.def Info: cabecalho_sbpo.png  used on input line 79.
 (pdftex.def)             Requested size: 433.12209pt x 85.63428pt.
 
 
@@ -266,21 +266,41 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 [1
 
 {C:/Users/vhbel/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map} <./cabecalho_sbpo.png>]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 77.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 80.
  (C:\Users\vhbel\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 77.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 80.
  (C:\Users\vhbel\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) (artigo.bbl
+)
+Overfull \hbox (0.33617pt too wide) in paragraph at lines 89--92
+[]\OT1/ptm/m/n/10.95 Para isso de-ve-mos come[]ar mo-de-lando nosso pro-blema, ini-ci-al-mente po-de-mos representa-
+ []
+
+
+Package natbib Warning: Citation `silva:99' on page 2 undefined on input line 126.
+
+
+Package natbib Warning: Citation `anna:06' on page 2 undefined on input line 126.
+
+
+Package natbib Warning: Citation `gates:03' on page 2 undefined on input line 126.
+
+
+Package natbib Warning: Citation `smith:02' on page 2 undefined on input line 126.
+
+
+Package natbib Warning: Citation `pele:04' on page 2 undefined on input line 126.
+
+(artigo.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 130--1
 
  []
 
 File: cabecalho_sbpo.png Graphic file (type png)
 <use cabecalho_sbpo.png>
-Package pdftex.def Info: cabecalho_sbpo.png  used on input line 23.
+Package pdftex.def Info: cabecalho_sbpo.png  used on input line 1.
 (pdftex.def)             Requested size: 433.12209pt x 85.63428pt.
 
 Package fancyhdr Warning: \footskip is too small (0.0pt): 
@@ -288,11 +308,13 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                \setlength{\footskip}{4.08003pt}.
 
 [2])
+
+Package natbib Warning: There were undefined citations.
+
 File: cabecalho_sbpo.png Graphic file (type png)
 <use cabecalho_sbpo.png>
 Package pdftex.def Info: cabecalho_sbpo.png  used on input line 135.
 (pdftex.def)             Requested size: 433.12209pt x 85.63428pt.
-
 
 Package fancyhdr Warning: \footskip is too small (0.0pt): 
 (fancyhdr)                Make it at least 4.08003pt, for example:
@@ -300,15 +322,15 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 
 [3] (artigo.aux) ) 
 Here is how much of TeX's memory you used:
- 5782 strings out of 478338
- 94375 string characters out of 2836700
- 410005 words of memory out of 3000000
- 24133 multiletter control sequences out of 15000+600000
+ 5769 strings out of 478338
+ 94247 string characters out of 2836700
+ 409882 words of memory out of 3000000
+ 24120 multiletter control sequences out of 15000+600000
  485212 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 68i,14n,77p,477b,433s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 68i,14n,77p,485b,342s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vhbel/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}<C:/Users/vhbel/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/vhbel/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/vhbel/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/vhbel/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/vhbel/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on artigo.pdf (3 pages, 119814 bytes).
+Output written on artigo.pdf (3 pages, 123169 bytes).
 PDF statistics:
  39 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

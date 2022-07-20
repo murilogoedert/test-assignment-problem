@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex artigo"] 1657856519 "artigo.aux" "artigo.bbl" "artigo" 1657856614
-  "./sbpo.bst" 1647529552 26446 94719ae850b5558d57f3e7dce4e4eca3 ""
-  "artigo.aux" 1657856614 1066 6a0a41c0e96a19e05f3ce1b8abf98139 "pdflatex"
-  "exemplo-latex.bib" 1647529552 1314 a480694f7758c48c04ff60bcdfc88eef ""
+["bibtex artigo"] 1658286019 "artigo.aux" "artigo.bbl" "artigo" 1658286028
+  "./sbpo.bst" 1658099924 27849 94719ae850b5558d57f3e7dce4e4eca3 ""
+  "artigo.aux" 1658286028 890 c337d493d4715c20653a554994e1756d "pdflatex"
+  "exemplo-latex.bib" 1658286017 545 08752ea27874fe3851d4c32d939d3778 ""
   (generated)
   "artigo.bbl"
   "artigo.blg"
-["pdflatex"] 1657856613 "e:/projects/test-allocation-problem/docs/artigo.tex" "artigo.pdf" "artigo" 1657856614
+["pdflatex"] 1658286027 "e:/projects/test-allocation-problem/docs/artigo/artigo.tex" "artigo.pdf" "artigo" 1658286028
   "C:/Users/vhbel/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1657855970 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/vhbel/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1657855948 10329961 00d51f0bbdb60a34b55b1efb72330d82 ""
   "C:/Users/vhbel/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
@@ -84,12 +84,12 @@
   "C:/Users/vhbel/AppData/Local/Programs/MiKTeX/tex/latex/tools/indentfirst.sty" 1636710260 1618 786b14c5a3e144c3a51452d08232d18b ""
   "C:/Users/vhbel/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/vhbel/AppData/Local/Programs/MiKTeX/tex/latex/vmargin/vmargin.sty" 1090537524 7055 5eae49c3f07fead60d92def0a4f5c30f ""
-  "artigo.aux" 1657856614 1066 6a0a41c0e96a19e05f3ce1b8abf98139 "pdflatex"
-  "artigo.bbl" 1657856520 1362 f38b98fa83b385a53316e80346285a6d "bibtex artigo"
-  "artigo.tex" 1657856613 5462 54eccdd8c52524801700c14785e420ac ""
-  "cabecalho_sbpo.png" 1647538600 50545 2729cb53296e5ab34c5eb6e6e7a8d520 ""
-  "e:/projects/test-allocation-problem/docs/artigo.tex" 1657856613 5462 54eccdd8c52524801700c14785e420ac ""
-  "sbpo-template.sty" 1647529552 3845 c522a344177d2dd552193f806f149ffc ""
+  "artigo.aux" 1658286028 890 c337d493d4715c20653a554994e1756d "pdflatex"
+  "artigo.bbl" 1658286020 705 eb3fec027dffbc429198fb8a9272e546 "bibtex artigo"
+  "artigo.tex" 1658286027 6718 63235915fb9ac935d4f1b9f521dfc99e ""
+  "cabecalho_sbpo.png" 1658280903 59159 03af61a3a15f07e2df250d991f94be31 ""
+  "e:/projects/test-allocation-problem/docs/artigo/artigo.tex" 1658286027 6718 63235915fb9ac935d4f1b9f521dfc99e ""
+  "sbpo-template.sty" 1658099924 3981 c522a344177d2dd552193f806f149ffc ""
   (generated)
   "artigo.aux"
   "artigo.log"

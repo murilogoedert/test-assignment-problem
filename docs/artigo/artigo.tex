@@ -18,7 +18,7 @@
 
 \begin{document}
 
-\title{Aloca\c c\~ao de testes} 
+\title{Test-Assignment Problem} 
 
 \maketitle
 \thispagestyle{fancy}
@@ -28,7 +28,7 @@
 \institute{Engenharia de Software
 UDESC}
 \iaddress{Ibirama/SC - Brasil}
-\email{e-mail}
+\email{murilogoedert@gmail.com}
 }
 
 \author{ 
@@ -41,15 +41,16 @@ UDESC}
 
 \vspace{8mm}
 \begin{resumo}
-Este modelo resume as normas de formata\c c\~ao para os trabalhos completos a serem publicados
-nos Anais do LII SBPO. T\'\i tulo, filia\c c\~ao, resumo e palavras-chave devem repetir fielmente
-o que foi informado quando o autor cadastrou o artigo atrav\' es do sistema de submiss\~ao.
-O Resumo deve ter no m\' aximo 150 palavras.
+A atribui\c c\~ao de testes \'e um problema de otimiza\c c\~ao complexo, o objetivo deste problema \'e encontrar a melhor maneira de 
+distribuir um teste dentro de uma sala a fim de diminuir ao m\'aximo a probabilidade de ocorrer a copia de respostas 
+entre os aplicadores da mesma. O presente documento tem como objetivo resolver esse problema de otimiza\c c\~ao implementando 
+um conjunto de metaheur\'isticas incluindo estrat\'egias construtivas e por modifica\c c\~ao, e ainda realizando um estudo experimental a partir do resultado 
+destas implemeta\c c\~oes
  \end{resumo}
 
 \bigskip
 \begin{palchaves}
-Primeira, Segunda, Terceira.
+Aloca\c c\~ao de testes, Metaheur\'isticas, Problemas de otimiza\c c\~ao.
 
 \bigskip
 \noindent{T\'opicos (indique, em ordem de PRIORIDADE, o(s) t\'opicos(s) de seu artigo) }
@@ -59,14 +60,16 @@ Primeira, Segunda, Terceira.
 \vspace{8mm}
 
 \begin{abstract}
-This document presents the format for full papers to be published in the Annals of the LII SBPO.
-Title, affiliation, abstract and keywords must be exactly the same as the author informed when registered the paper through the submission system. 
-The Abstract must not exceed 150 words.
+The test-Assignment problem is a complex optimization problem, the main objetive of the problem is to find the best way to distribute a test within 
+a room in order to minimize the probability of copying answers among the applicators. The document aims to solve this optimization problem implementing a
+set of metaheuristics including constructive strategies and modification, and still and still carrying out an experimental study on the result
+of these implements.
+
 \end{abstract}
 
 \bigskip
 \begin{keywords}
-First keyword. Second keyword. Last keyword.
+Test-Assignment. Metaheuristics. Optimization problems.
 
 \bigskip
 \noindent{Paper topics (indicate in order of PRIORITY the paper topic(s))}
@@ -76,22 +79,19 @@ First keyword. Second keyword. Last keyword.
 \newpage
 \section{Introdu\c{c}\~ao} 
  
-A primeira p\'agina dos trabalhos publicados ser\'a constitu\'\i da com as informa\c c\~oes fornecidas
-no formul\'ario de submiss\~ao de trabalho.
-Por isto, os nomes de \textbf {todos} os autores devem ser cadastrados nesse formul\'ario.
-Os nomes que n\~ao sejam informados nesse formul\'ario n\~ao aparecer\~ao entre os autores
-na programa\c c\~ao do Simp\'osio nem nos Anais.
+A partir do memento que temos a aplica\c c\~ao de um teste com um numero x de concorrentes queremos eliminar ao m\'aximo a probabilidade de que possa ocorrer copia de respostas de outros concorrentes 
+pois isso estar\'a afetando o resultado final dos melhores classificados, a partir disso que surge o problema de aloca\c c\~ao de de testes. 
+A probabilidade e facilidade de que se ocorra esse poss\'ivel roubo de respostas pode se dar a partir de alguns fatores,
+sendo eles por exemplo a proximidade entre as carteiras e o qu\~ao parecido e cada uma das provas a cada par de carteiras pode ser, a partir desses fatores pode ser 
+definido uma nota a para a facilidade de que ocorra ou essa infra\c c\~ao de copia de respostas entre provas, ou seja o objetivo de o problema \'e minimizar ao m\'aximo
+essa possibilidade. 
 
+Para isso devemos come\c car modelando nosso problema, inicialmente podemos representa-lo como sendo um grafo, cada v\'ertice sendo uma carteira e cada arestas ir\'a conter
+o um pesso que define a facilidade que ocorra a famosa cola, ou seja um as respostas de um teste sejam copiadas por outra pessoa que esteja fazendo o mesmo teste. Esse pesso como
+abordado anteriormente ser\'a definido pela jun\c c\~ao do peso da distancia entre os pares de carteiras e de qu\~ao cada prova \'e parecida entre estes mesmos pares.
 
-No campo \textit{Paper Title} deve ser informado apenas o t\'\i tulo do trabalho,
-\textbf{ sem qualquer identifica\-\c c\~ao dos autores ou suas institui\c c\~oes}.
-
-O campo \textit{Paper Abstract} dever\'a ser preenchido com o Resumo, de \textbf{no m\'aximo 150 palavras},
-seguido por 3 palavras-chave e pelo(s) nome(s) da(s) \'area(s) de classifica\c c\~ao principal do trabalho escolhida(s) 
-entre aquelas assinaladas no campo \textit{ Paper Topics} (ordenadas em ordem de prioridade). 
-A seguir, no caso de resumos escritos em portugu\^es ou espanhol, dever\'a vir o Abstract em ingl\^es
-e as \textit{keywords}, traduzindo fielmente o Resumo e as palavras-chave. 
-
+Este problema foi introduzido inicialmente Duives~\citep{duives:13}. para melhorar essa distribui\c c\~ao de testes aplicados na Universidade de Bologna. A partir de seu estudo inicial foi demonstrado que o 
+problema pode ser classificado como NP-Dif\'icil, e o formulou o problema como um programa quadr\'atico bin\'ario n\~ao convexo.
 
 \section{Submiss\~ao do Texto Completo}
 
@@ -123,7 +123,7 @@ Os textos devem utilizar p\'aginas de tamanho \textbf{A4} (29,7 x 21,0 cm) com \
 \section{ Estilo das Cita\c c\~oes}
 
 
-As cita\c c\~oes no texto devem estar entre colchetes e conter  os \'ultimos sobrenomes dos autores~\citep{silva:99}, no caso de um ou dois autores, e o \'ultimo sobrenome seguido de "et al." no caso de mais de dois autores, seguidos do \textbf{ano da publica\c c\~ao}, como por exemplo,~\citep{anna:06},~\citep{gates:03}, ~\citep{smith:02}, ~\citep{silva:99}, ~\citep{pele:04}, ~\citep{web:16}.
+As cita\c c\~oes no texto devem estar entre colchetes e conter  os \'ultimos sobrenomes dos autores~\citep{silva:99}, no caso de um ou dois autores, e o \'ultimo sobrenome seguido de "et al." no caso de mais de dois autores, seguidos do \textbf{ano da publica\c c\~ao}, como por exemplo,~\citep{anna:06},~\citep{gates:03}, ~\citep{smith:02}, ~\citep{duives:13}, ~\citep{pele:04}, ~\citep{web:16}.
 As refer\^encias no final do texto devem estar em ordem alfab\'etica do \'ultimo sobrenome do primeiro autor. 
 
 
