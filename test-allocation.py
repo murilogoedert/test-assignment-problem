@@ -1,10 +1,8 @@
-
+from calendar import TUESDAY
 import sys, re, random, time
 from os import walk
 import matplotlib.pyplot as plot
 
-
-from numpy import array
 
 _numDesks = 0
 _numDistances = 0
@@ -14,10 +12,9 @@ _desks = []
 _tests = []
 _distanceMatrix = []
 _similarityMatrix = []
-_solution = []
 
-_iterations = 100
 
+_maxIterations = 200
 
 def readInstance(instance = False):
     global _numDesks, _numDistances, _numTests, _numEmptyDesks, _desks, _tests, _distanceMatrix, _similarityMatrix
@@ -30,15 +27,14 @@ def readInstance(instance = False):
     _tests = []
     _distanceMatrix = []
     _similarityMatrix = []
-    _solution = []
 
     if instance:
         file = open(instance)
     elif(len(sys.argv) > 1):
         file = open(sys.argv[1])
     else:
-        # file = open('instances/lab3_2x0.txt')
-        file = open('instances/lab2_3x10.txt')
+        file = open('instances/lab3_2x0.txt')
+        #file = open('instances/lab1_2x10.txt')
         
     
     lines = file.readlines()
@@ -84,60 +80,7 @@ def readInstance(instance = False):
         _similarityMatrix[i][j] = value
         countLines += 1
 
-def createMatrix(lines, columns, defValue = 0):
-    matrix = []
-    for i in range(lines):
-        line = []
-        for j in range(columns):
-            line.append(defValue)
-        matrix.append(line)
-    return matrix
-
-def closestDesk(desk):
-    distance = 0
-    closest = 1
-
-    for i in range(len(_distanceMatrix)):
-        for j in range(i, len(_distanceMatrix)):
-            if _distanceMatrix[i][j] != 0 and _distanceMatrix[i][j] > distance and  (i == desk or j == desk):
-                distance = _distanceMatrix[i][j]
-                if i == desk:
-                    closest = j
-                else:
-                    closest = i
-                
-            if distance == 1:
-                break
-            
-        if distance == 1:
-            break
-
-    return closest
-
-
-def lessSimilarTest(test):
-    similarity = 1
-    bestTest = 1
-    for i in range(len(_similarityMatrix)):
-        for j in range(len(_similarityMatrix)):
-            if _similarityMatrix[i][j] != 0 and _similarityMatrix[i][j] < similarity and (i == test or j == test):
-                similarity = _similarityMatrix[i][j]
-                if i == test:
-                    bestTest = j
-                else:
-                    bestTest = i
-
-
-    return bestTest
-
-def chooseTest(test):
-    testToChoose = test
-    while testToChoose == test:
-        testToChoose = random.randint(1, _numTests - 1)
-    
-    return testToChoose
-
-def avaliaSolucao(sol):
+def objective(sol):
     totalCost = 0
     for i in range(len(_distanceMatrix)):
         #Considera apenas os elementos acima da diagonal principal
@@ -155,347 +98,306 @@ def avaliaSolucao(sol):
 
     return totalCost
 
-def heuristicaConstrutiva1(allowEmpty = True):
-    global _solution
-    _solution = []
-    if allowEmpty:
-        for i in range(len(_desks)):
-            _solution.append(0)
+def createMatrix(lines, columns, defValue = 0):
+    matrix = []
+    for i in range(lines):
+        line = []
+        for j in range(columns):
+            line.append(defValue)
+        matrix.append(line)
+    return matrix
 
-        for i in range(len(_desks) - _numEmptyDesks):
-            _solution[i] = random.randint(1, _numTests - 1)  
+def geraVizinhancaTrocaIndices(solucao):
+    vizinhanca = []
+    for i in range(len(solucao)):
+        for j in range(i, len(solucao)):
+            newSol = solucao.copy()
+            valI = solucao[i]
+            valJ = solucao[j]
+            newSol[i] = valJ
+            newSol[j] = valI
+            vizinhanca.append(newSol)
+
+    return vizinhanca
+
+def geraVizinhancaTrocaProvas(solucao):
+    vizinhanca = []
+    for i in range(len(solucao)):
+        if solucao[i] > 0:
+            for teste in range(1, _numTests - 1):
+                newSol = solucao.copy()
+                newSol[i] = teste
+                vizinhanca.append(newSol)
+    
+    return vizinhanca
+
+
+def estrategiaMelhorVizinhoTrocaProvas(solucao, randSelection = False):
+    vizinhanca = geraVizinhancaTrocaProvas(solucao)
+    bestSolution = solucao
+
+    if(randSelection == False):
+        bestValue = objective(solucao)
+
+        for vizinho in vizinhanca:
+            obj = objective(vizinho)
+            if obj < bestValue:
+                bestSolution = vizinho
+                bestValue = obj
     else:
-        for i in range(len(_desks)):
-            _solution.append(random.randint(1, _numTests - 1))
+        list = []
+        for vizinho in vizinhanca:
+            obj = objective(vizinho)
+            if list.count((vizinhanca.index(vizinho), obj)) == 0:
+                list.append((vizinhanca.index(vizinho), obj))
+        
+        def orderList(o):
+            return o[1]
 
-def heuristicaConstrutiva2(): 
-    global _solution  
-    _solution = []
-    #inicia com tudo vazio
-    for i in range(len(_desks)):
-        _solution.append(0)
+        list.sort(key=orderList)
+        bestSolution = vizinhanca[random.choice(list[0:randSelection])[0]]
 
-    #Para cada indice da solução
-    for i in range(len(_solution)):
-        if(_solution.count(0) > _numEmptyDesks):
-            #O primeiro sempre atribui o teste 1
-            if i == 0:
-                _solution[i] = 1
-            else:
-                #Nos próximos, busca o indice da carteira mais proxima
-                closest = closestDesk(i) 
+    return bestSolution
 
-                closestTest = _solution[closest]
+def estrategiaMelhorVizinhoTrocaIndices(solucao):
+    vizinhanca = geraVizinhancaTrocaIndices(solucao)
+    bestValue = objective(solucao)
+    bestSolution = solucao
 
-                #Atribui no indice atual o teste que tem menos similaridade com a carteira mais proxima
-                _solution[i] = lessSimilarTest(closestTest)
+    for vizinho in vizinhanca:
+        obj = objective(vizinho)
+        if obj < bestValue:
+            bestSolution = vizinho
+            bestValue = obj
 
+    return bestSolution
 
-def modificaSolucaoSwapAleatorio(solucao):
-    index1 = 0
-    index2 = 0
-    while index1 == index2:
-        index1 = random.randint(0, len(solucao) - 1)
-        index2 = random.randint(0, len(solucao) - 1)
-    aux = solucao[index1];
-    solucao[index1] = solucao[index2]
-    solucao[index2] = aux
+def perturbaSolucaoSwapIndices(solucao):
+    sol = solucao.copy()
+    i = 0
+    j = 0
+    while(i == j):
+        i = random.randint(0, len(sol) - 1)
+        j = random.randint(0, len(sol) - 1)
 
-    return solucao
+    aux = sol[i]
+    sol[i] = sol[j]
+    sol[j] = aux
 
-def modificaSolucaoSwapIndices(solucao, a, b):
-    aux = solucao[a]
-    solucao[a] = solucao[b]
-    solucao[b] = aux
-    return solucao
+    return sol
 
-def modificaSolucaoSwapVantajoso(solucao):
-    trocou = False
-    initialValue = avaliaSolucao(solucao)
-    solucaoConcumbente = solucao
-    for i in range(10):
-        solucaoConcumbente = modificaSolucaoSwapAleatorio(solucaoConcumbente)
-        value = avaliaSolucao(solucaoConcumbente)
-        if value < initialValue:
-            return solucaoConcumbente
+def perturbaSolucaoSwapTest(solucao):
+    sol = solucao.copy()
+    index = random.randint(0, len(sol) - 1)
+    while sol[index] == 0:
+        index = random.randint(0, len(sol) - 1)
 
-    return solucaoConcumbente
+    test = sol[index]
+    newTest = random.randint(1, _numTests - 1)
+    while(newTest == test):
+         newTest = random.randint(1, _numTests - 1)
 
-def modificaSolucaoTrocaTeste(solucao, index):
-    test = solucao[index]
-    while(test == solucao[index]):
-        test = random.randint(1, _numTests - 1)
+    sol[index] = newTest
 
-    solucao[index] = test
+    return sol
 
-    return solucao, test
-
+def getIndexOfChangeProva(solucao1, solucao2):
+    for index, (first, second) in enumerate(zip(solucao1, solucao2)):
+        if first != second:
+            return index
+    return -1
     
 
-def criaSolucaoInicial():
-    heuristicaConstrutiva1()
+#################################
+####Heurísticas Construtivas#####
+#################################
 
 
-def doHeuristica1():
+#Totalmente randomica
+def heuristicaConstrutiva_1(full=False):
     readInstance()
-    heuristicaConstrutiva1()
-    print('\nHeurística Construtiva I')
-    print('value ' + str("%0.2f" % avaliaSolucao(_solution)))
-    print('-----------------------')
+    solution = [0 for i in range(_numDesks)]
+    rang = len(solution) - _numEmptyDesks if not full else len(solution)
+    for i in range(rang):
+        solution[i] = random.randint(1, _numTests - 1)
 
-def doHeuristica2():
-    readInstance()
-    heuristicaConstrutiva2()
-    print('\nHeurística Construtiva II')
-    print('value ' + str("%0.2f" % avaliaSolucao(_solution)))
-    print('-----------------------')
+    return solution
 
+#Utiliza a primeira heurística para criar uma solução inicial aleatória sem nenhuma carteira vazia
+#Após isso vai removendo da solução as N provas que mais diminuiem o valor da função objetivo
+def heuristicaConstrutiva_2():
+    solution = heuristicaConstrutiva_1(True)
+    initialValue = objective(solution)
+    if _numEmptyDesks > 0:
+        scores = []
+        for i in range(len(solution)):
+            newSolution = solution.copy()
+            newSolution[i] = 0
+            newValue = objective(newSolution)
+            scores.append((i, initialValue - newValue))
 
-def caminhadaAleatoria():
-    readInstance()
-    criaSolucaoInicial()
-    bestValue = 0
-    solucaoConcumbente = _solution
-    valueConcumbente = avaliaSolucao(_solution)
+        def orderFn(el):
+            return el[1]
 
-    for i in range(_iterations):
-        newSolution = modificaSolucaoSwapAleatorio(solucaoConcumbente)
-        value = avaliaSolucao(newSolution)
-        if value < valueConcumbente:
-            bestValue = value
-            solucaoConcumbente = newSolution
+        scores.sort(key=orderFn,  reverse=True)
+        for i in range(_numEmptyDesks):
+            solution[scores[i][0]] = 0
 
-    print('\nCaminhada aleatória')
-    print('initial - ' + str("%0.2f" % valueConcumbente))
-    print('value - ' + str("%0.2f" % bestValue))
-    print('-----------------------')
+    return solution
 
+#################################
+########## Comparações ##########
+#################################
 
+def buscaLocalSimplesPM(solucao=False):
+    if not solucao:
+        solucao = heuristicaConstrutiva_2()
 
-def buscaLocalPrimeiraMelhora():
-    readInstance()
-    criaSolucaoInicial()
-    valueConcumbente = avaliaSolucao(_solution)
-    solucao = _solution
-    bestValue = 0
-    stop = False
-    for i in range(len(_solution)):
-        for j in range(i + 1, len(_solution)):
-            newSol = modificaSolucaoSwapIndices(solucao, i, j,)
-            value = avaliaSolucao(newSol)
-            if value < valueConcumbente:
-                stop = True
-                solucao = newSol
-                bestValue = value
-                break
-        if stop:
+    value = objective(solucao)
+    bestSolution = solucao
+
+    for i in range(_maxIterations):
+        melhorou = False
+        vizinhos = geraVizinhancaTrocaProvas(solucao)
+        for vizinho in vizinhos:
+            obj = objective(vizinho)
+            if(obj < value):
+                value = obj
+                melhorou = True
+                bestSolution = vizinho
+        
+        if melhorou:
             break
 
-    print('\nBusca Local - Primeira melhora')
-    print('initial - ' + str("%0.2f" % valueConcumbente))
-    print('value - ' + str("%0.2f" % bestValue))
-    print('-----------------------')
+    return bestSolution
 
-def buscaLocalMelhorMelhora():
-    readInstance()
-    criaSolucaoInicial()
-    valueConcumbente = avaliaSolucao(_solution)
-    bestValue = valueConcumbente
-    solucaoConcumbente = _solution
+def buscaLocalSimplesMM(solucao=False):
+    if not solucao:
+        sol = heuristicaConstrutiva_2()
+    else:
+        sol = solucao.copy()
+    
+    bestValue = objective(sol)
+    
     stop = False
-    cont = 0
-    for i in range(len(_solution)):
-        for j in range(i + 1, len(_solution)):
-            newSol = modificaSolucaoSwapIndices(solucaoConcumbente, i, j,)
-            value = avaliaSolucao(newSol)
-            cont += 1
-            if value < bestValue:
-                solucaoConcumbente = newSol
-                bestValue = value
+    iter = 0;
+    while(not stop):
+        iter += 1
+        vizinhos = geraVizinhancaTrocaProvas(sol)
+        melhorou = False
+        for vizinho in vizinhos:
+            obj = objective(vizinho)
+            if(obj < bestValue):
+                bestValue = obj
+                melhorou = True
+                sol = vizinho
 
-    print('\nBusca Local - Melhor melhora')
-    print('initial - ' + str("%0.2f" % valueConcumbente))
-    print('value - ' + str("%0.2f" % bestValue))
-    print('-----------------------')
 
-def buscaLocalRandomizada():
-    readInstance()
-    criaSolucaoInicial()
-    valueConcumbente = avaliaSolucao(_solution)
-    initialValue = valueConcumbente
-    solutionConcumbente = _solution
-    for i in range(_iterations):
-        if random.randint(0,1) == 0:
-            solution = modificaSolucaoSwapAleatorio(solutionConcumbente)
+        if not melhorou:
+            stop = True
+
+    return sol
+
+def caminhadaAleatoria(solucao=False):
+    if not solucao:
+        sol = heuristicaConstrutiva_2()
+    else:
+        sol = solucao.copy()
+    
+    bestValue = objective(sol)
+
+    for i in range(_maxIterations):
+        if random.randint(0, 1) == 1:
+            newSol = perturbaSolucaoSwapIndices(sol)
         else:
-            solution = modificaSolucaoSwapVantajoso(solutionConcumbente)
-        
-        value = avaliaSolucao(solution)
-        if value < valueConcumbente:
-            valueConcumbente = value
-            solutionConcumbente = solution
+            newSol = perturbaSolucaoSwapTest(sol)
 
-    print('\nBusca Local Randomizada')
-    print('initial - ' + str("%0.2f" % initialValue))
-    print('value - ' + str("%0.2f" % valueConcumbente))
-    print('-----------------------')
+        obj = objective(newSol)
 
-def orderList(el):
-    return el[1]
+        if(obj < bestValue):
+            sol = newSol
+            bestValue = obj
 
-def getScores(solution, reversed = False):
-    scores = []
-    for i in range(len(solution)):
-        if solution[i] != 0:
-            evalSol = solution.copy()
-            evalSol[i] = 0
-            scores.append((i, avaliaSolucao(evalSol)))
+    return sol
 
-    scores.sort(key=orderList, reverse=reversed)
-    return scores
-
-def clearDesksByScore(solution, numEmptyDesks = 0):
-    newSol = solution.copy()
-    cont = 0
-    for i in range(len(newSol)):
-        if cont < numEmptyDesks:
-            scores = getScores(newSol, reversed=False)
-            newSol[scores[0][0]] = 0
+def buscaLocalRandomizada(p = 0, solucao=False):
+    if not solucao:
+        solucao = heuristicaConstrutiva_2()
+    
+    bestValue = objective(solucao)
+    bestSolution = solucao
+    concumbente = solucao
+    
+    for i in range(_maxIterations):      
+        r = random.randint(0, 1)
+        if r <= p:
+            concumbente = perturbaSolucaoSwapIndices(concumbente)
         else:
-            break 
-        cont += 1
+            concumbente = estrategiaMelhorVizinhoTrocaIndices(concumbente)
 
-    return newSol
+        if(objective(concumbente) < bestValue):
+            bestSolution = concumbente
 
+    return bestSolution
 
+def buscaTabu(solucao=False, tabuTenure = 4):
+    if not solucao:
+        sol = heuristicaConstrutiva_2()
+    else:
+        sol = solucao.copy()
+    
+    bestSolution = sol
+    bestValue = objective(sol)
+    tabuTable = [0 for i in range(_numDesks)]
 
-def buscaTabu():
+    for i in range(_maxIterations):
+        solucaoAtual = estrategiaMelhorVizinhoTrocaProvas(sol)
+        indexTabu = getIndexOfChangeProva(solucaoAtual, sol)
+        if tabuTable[indexTabu] > 0:
+            if i - tabuTenure > tabuTable[indexTabu]:
+                sol = solucaoAtual
+                tabuTable[indexTabu] = i
+            #aspiração
+            elif objective(solucaoAtual) < bestValue:
+                sol = solucaoAtual
+                tabuTable[indexTabu] = i
+        else:
+            sol = solucaoAtual
+            tabuTable[indexTabu] = i
 
-    def buscaMelhorSolucaoNaoTabu(solucao:list, tabuList:list):
-        list = []
-        for i in range(len(solucao)):
-            if tabuList.count(i) == 0:
-                solTest = solucao.copy()
-                solTest[i] = 0
-                list.append((i, avaliaSolucao(solTest)))
-        
-        list.sort(key=orderList, reverse=True)
-        indiceEscolhido = list[random.randint(0, randSelectionSize - 1)][0]
+        obj = objective(sol)  
+        if obj < bestValue:
+            bestValue = obj
+            bestSolution = sol
 
-        bestValue = 9999999
-        bestSolution = False
+    return bestSolution
 
-
-        for i in range(1, _numTests):
-            solucaoAvaliar = solucao.copy()
-            solucaoAvaliar[indiceEscolhido] = i
-            value = avaliaSolucao(solucaoAvaliar)
-            if value < bestValue:
-                bestValue = value
-                bestSolution = solucaoAvaliar
-
-        return indiceEscolhido, bestSolution
-
-    def removeDesks(solucao, qtd):
-        for i in range(len(solucao)):
-            if(solucao.count(0) < qtd):
-                solucao[i] = 0
-
-
-    def updateTabu(tabuCont:list, tabuList:list):
-        for i in range(len(tabuCont)):
-            if tabuCont[i] > 0:
-                tabuCont[i] -= 1
-
-            if tabuCont[i] == 0 and tabuList.count(i) > 0:
-                tabuList.remove(i)
-
-        return tabuCont, tabuList
-        
-
-    readInstance()
-    heuristicaConstrutiva1(allowEmpty=False)
-    solI = _solution.copy() 
-    removeDesks(solI, _numEmptyDesks)
-    initialValue = avaliaSolucao(solI)
-    bestValue = initialValue
-    bestSolution = _solution
-    solucaoAtual = _solution
-    tabuIteractions = 35
-    randSelectionSize = 6
-    totalIteracoes = 200
-    tabuList = []
-    tabuCont = [0 for i in range(_numDesks)]
-
-
-    cont = 0
-
-    pltX = []
-    pltY = []
-
-    while cont < totalIteracoes:
-        tabuIndex, solucaoAtual = buscaMelhorSolucaoNaoTabu(solucaoAtual, tabuList)
-        tabuList.append(tabuIndex)
-        tabuCont[tabuIndex] = tabuIteractions
-
-        cleanSolution = clearDesksByScore(solucaoAtual, _numEmptyDesks)
-        currentValue = avaliaSolucao(cleanSolution)
-        if currentValue < avaliaSolucao(bestSolution):
-            bestSolution = cleanSolution
-            bestValue = currentValue
-            pltX.append(cont * 2)
-            pltY.append(bestValue)
-
-        updateTabu(tabuCont, tabuList)
-        cont += 1
-
-    print('\nBusca Tabu')
-    print('initial - ' + str("%0.2f" % initialValue))
-    print('value - ' + str("%0.2f" % bestValue))
-    print('solution - ' + str(bestSolution))
-    print('-----------------------')
-
-    plot.plot(pltX, pltY)
-    plot.show()
-        
-def construcaoRepedida():
-    readInstance()
-    criaSolucaoInicial()
-
-def gulosoK():
-    return
-
-def reinicioAleatorio():
-    return
-
-# # Etapa II
-# doHeuristica1()
-# doHeuristica2()
-# caminhadaAleatoria()
-# buscaLocalPrimeiraMelhora()
-# buscaLocalMelhorMelhora()
-
-# Etapa III
-
-# Modificação de Soluções
-# buscaLocalRandomizada()
-#buscaTabu()
-# reinicioAleatorio()
-
-# #Construção de Soluções
-# construcaoRepedida()
-# gulosoK()
-
-
-#WHAAAAT???
-# .\instances\lab2_3x10.txt
-sol = [2, 0, 1, 2, 3, 0, 0, 2, 3, 3, 0, 3, 0, 3, 2, 3, 3, 2, 1, 0, 1, 3, 3, 3, 2, 0, 2, 3, 3, 2, 3, 3, 3, 3, 0, 3, 3, 3, 3, 2, 0, 0, 2, 3, 3, 2, 2, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 2, 3, 3]
-# # sool = [1, 1, 0, 1, 0, 0, 1, 1, 0, 2, 0, 1, 1, 2, 1, 0, 2, 0, 1, 1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 0, 2, 0, 0, 1, 1, 1, 2, 1, 1, 0]
-# #sol = [1, 1, 0, 1, 0, 0, 2, 1, 0, 2, 0, 1, 1, 2, 1, 0, 2, 0, 1, 1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 0, 2, 0, 0, 1, 1, 1, 2, 1, 1, 0]
+def construcaoRepetida(numer: int ,repeat = 20):
+    # bestSolution = heuristicaConstrutiva_2()
+    # bestValue = objective(bestSolution)
+    # for i in range(repeat):
+    #     sol = heuristicaConstrutiva_2()
+    #     newSol = buscaLocalRandomizada(solucao=sol)
+    #     obj = objective(newSol)
+    #     if obj < bestValue:
+    #         bestSolution = newSol
+    #         bestValue = obj
+    
+    # return bestSolution
+    return True
+    
+# print(objective(heuristicaConstrutiva_1()))
+# print(objective(heuristicaConstrutiva_2()))
+# print(objective(caminhadaAleatoria()))
+# print(objective(buscaLocalSimplesPM()))
+# print(objective(buscaTabu()))
 readInstance()
-print(avaliaSolucao(sol))
+sol = buscaLocalRandomizada()
+print(sol)
+print(objective(sol))
 
+# print(objective(buscaLocalRandomizada(p = 0)))
+# print(construcaoRepetida())
+# print(objective(buscaTabu()))
 
-
-
-
+print('Best Known: ' + str(23.18))
