@@ -1,7 +1,7 @@
 from hashlib import md5
 import sys, re, random, time
 from os import walk
-# import matplotlib.pyplot as plot
+import matplotlib.pyplot as plot
 
 
 _numDesks = 0
@@ -14,7 +14,7 @@ _distanceMatrix = []
 _similarityMatrix = []
 
 
-_maxIterations = 100
+_maxIterations = 300
 
 def readInstance(instance = False):
     global _numDesks, _numDistances, _numTests, _numEmptyDesks, _desks, _tests, _distanceMatrix, _similarityMatrix
@@ -33,8 +33,8 @@ def readInstance(instance = False):
     elif(len(sys.argv) > 1):
         file = open(sys.argv[1])
     else:
-       # file = open('instances/lab3_4x10.txt')
-        file = open('instances/lab1_2x0.txt')
+        file = open('instances/lab3_2x0.txt')
+        #file = open('instances/lab1_2x0.txt')
         
     
     lines = file.readlines()
@@ -145,11 +145,11 @@ def geraVizinhancaTrocaIndices(solucao):
 
 def geraVizinhancaTrocaProvas(solucao):
     vizinhanca = []
-    for i in range(len(solucao)):
-        if solucao[i] > 0:
-            for teste in range(1, _numTests):
+    amostras = int(_numDesks / 2)
+    while len(vizinhanca) < amostras:
+        for teste in range(1, _numTests):
                 newSol = solucao.copy()
-                newSol[i] = teste
+                newSol[random.randint(0, _numDesks - 1)] = teste
                 if newSol != solucao:
                     vizinhanca.append(newSol)
     
@@ -195,12 +195,13 @@ def estrategiaMelhorVizinhoTrocaIndices(solucao):
 
     return bestSolution
 
-def estrategiaMelhorVizinhoNaoTabu(solucao, tabuTable, tabuTenure, iteraction):
+def estrategiaMelhorVizinhoNaoTabu(solucao, tabuTable, tabuTenure, iteraction, bestValue):
     actualValue = objective(solucao)
     vizinhanca = geraVizinhancaTrocaProvas(solucao)
     scores = []
     for vizinho in vizinhanca:
-        scores.append((vizinho, actualValue - objective(vizinho)))
+        obj = objective(vizinho)
+        scores.append((vizinho, actualValue - obj, obj))
     
     scores.sort(key=orderFn, reverse=True)
     acceptedSolution = solucao
@@ -210,7 +211,7 @@ def estrategiaMelhorVizinhoNaoTabu(solucao, tabuTable, tabuTenure, iteraction):
         indexChange = getIndexOfChangeProva(solucao, sol)
 
         if tabuTable[indexChange] > 0:
-            if iteraction - tabuTenure > tabuTable[indexChange]:
+            if iteraction - tabuTenure > tabuTable[indexChange] or score[2] < bestValue: #aspiração
                 acceptedSolution = sol
                 tabuTable[indexChange] = iteraction
                 break
@@ -256,7 +257,7 @@ def getIndexOfChangeProva(solucao1, solucao2):
             return index
     return -1
     
-def bestTestForIndex(solucao, indice):
+def bestTestForIndex(solucao, indice, k = 0):
     scores = []
     for i in range(1, _numTests):
         sol = solucao.copy()
@@ -266,7 +267,14 @@ def bestTestForIndex(solucao, indice):
 
     scores.sort(key=orderFn)
 
-    return scores[0][0]
+    if k == 0:
+        return scores[0][0]
+
+    if k > len(scores):
+        k = len(scores)
+
+    return scores[random.randint(0, k - 1)][0]
+        
 
 #################################
 ####Heurísticas Construtivas#####
@@ -285,28 +293,29 @@ def heuristicaConstrutiva_1(full = False):
 
     return removeEmptyDesks(solution)
 
+def gulosoK(k = 3, full = False):
+    readInstance()
+    solution = [0 for i in range(_numDesks)]
+
+    for i in range(len(solution)):
+        solution[i] = bestTestForIndex(solution, i, k)
+
+    if full:
+        return solution
+    
+    return removeEmptyDesks(solution)
+    
+
+
 #Utiliza a primeira heurística para criar uma solução inicial aleatória sem nenhuma carteira vazia
 #Após isso vai removendo da solução as N provas que mais diminuiem o valor da função objetivo
-def heuristicaConstrutiva_2():
-    solution = heuristicaConstrutiva_1()
-    initialValue = objective(solution)
-    if _numEmptyDesks > 0:
-        scores = []
-        for i in range(len(solution)):
-            newSolution = solution.copy()
-            newSolution[i] = 0
-            newValue = objective(newSolution)
-            scores.append((i, initialValue - newValue))
-
-        scores.sort(key=orderFn,  reverse=True)
-        for i in range(_numEmptyDesks):
-            solution[scores[i][0]] = 0
-
-    return solution
-
-def heuristicaConstrutivaAleatoria():
-    return [random.randint(1, _numTests) for i in range(0, _numDesks)]
-
+def heuristicaConstrutiva_2(full = False):
+    readInstance()
+    sol = [random.randint(1, _numTests - 1) for i in range(0, _numDesks)]
+    if full:
+        return sol
+    
+    return removeEmptyDesks(sol)
 
 
 #################################
@@ -344,7 +353,7 @@ def buscaLocalSimplesMM(solucao=False):
     bestValue = objective(sol)
     
     stop = False
-    iter = 0;
+    iter = 0
     while(not stop):
         iter += 1
         vizinhos = geraVizinhancaTrocaProvas(sol)
@@ -361,6 +370,42 @@ def buscaLocalSimplesMM(solucao=False):
             stop = True
 
     return removeEmptyDesks(sol)
+
+def randomReestart(solucao=False, reestarts = 200):
+    if not solucao:
+        sol = heuristicaConstrutiva_2(full=True)
+    else:
+        sol = solucao.copy()
+    
+    bestSolution = sol
+    bestValue = objective(sol)
+
+    reestartCount = 0
+
+    pX = []
+    pY = []
+
+    cont = 0
+    while reestartCount < reestarts:
+        pX.append(cont)
+        newSol = buscaLocalSimplesMM(sol)
+        obj = objective(newSol)
+        pY.append(obj)
+        if obj < bestValue:
+            bestValue = obj
+            sol = newSol
+            bestSolution = sol
+        else:
+            sol = heuristicaConstrutiva_2(full=True)
+            reestartCount += 1
+
+        cont += 1
+        
+    plot.plot(pX, pY)
+    plot.show()
+
+    return removeEmptyDesks(bestSolution)
+    
 
 def caminhadaAleatoria(solucao=False):
     if not solucao:
@@ -404,28 +449,34 @@ def buscaLocalRandomizada(p = 0, solucao=False):
 
     return removeEmptyDesks(bestSolution)
 
-def buscaTabu(solucao=False, tabuTenure = 2):
+def buscaTabu(solucao=False, tabuTenure = 5):
     if not solucao:
         sol = heuristicaConstrutiva_1(True)
     else:
         sol = solucao.copy()
     
+    # dataX = []
+    # dataY = []
+
     bestSolution = sol
     bestValue = objective(sol)
     tabuTable = [0 for i in range(_numDesks)]
 
     for i in range(_maxIterations):
-        sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, i)
+        sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, i, bestValue)
         obj = objective(sol)
-  
+        # dataY.append(obj)
+        # dataX.append(i)
         if obj < bestValue:
             bestValue = obj
             bestSolution = sol
 
+    # plot.plot(dataX, dataY)
+    # plot.show()
     return removeEmptyDesks(bestSolution)
 
 def construcaoRepetida(repeat = 4):
-    bestSolution = heuristicaConstrutiva_1(True)
+    bestSolution = gulosoK(k=3, full=True)
     bestValue = objective(bestSolution)
     sol = bestSolution
     for i in range(repeat):
@@ -434,17 +485,26 @@ def construcaoRepetida(repeat = 4):
         if obj < bestValue or bestSolution == False: 
             bestSolution = newSol
             bestValue = obj
-        sol = heuristicaConstrutiva_1(True)
-        sol = perturbaSolucaoSwapIndices(sol)
+        sol = gulosoK(k=3, full=True)
     
     return removeEmptyDesks(bestSolution)
     
-# print('Heurística I : ' + str("%0.2f" % objective(heuristicaConstrutiva_1(False))))
-# print('Heurística II : ' + str("%0.2f" % objective(heuristicaConstrutiva_2()))) Precisa melhorar esta
-# print('Caminhada Aleatória : ' + str("%0.2f" % objective(caminhadaAleatoria())))
-# print('Busca Local Simples PM : ' + str("%0.2f" % objective(buscaLocalSimplesPM())))
-# print('Busca Local Simples MM : ' + str("%0.2f" % objective(buscaLocalSimplesMM())))
 
-print('Busca Tabu : ' + str("%0.2f" % objective(buscaTabu(tabuTenure=3))))
-# print('Busca Local Randomizada : ' + str("%0.2f" % objective(buscaLocalRandomizada(p=0))))
-# print('Construção Repetida : ' + str("%0.2f" % objective(construcaoRepetida())))
+#5 primeiros
+print('Heurística I : ' + str("%0.2f" % objective(heuristicaConstrutiva_1(False))))
+print('Heurística II : ' + str("%0.2f" % objective(heuristicaConstrutiva_2()))) 
+print('Caminhada Aleatória : ' + str("%0.2f" % objective(caminhadaAleatoria())))
+print('Busca Local Simples PM : ' + str("%0.2f" % objective(buscaLocalSimplesPM())))
+print('Busca Local Simples MM : ' + str("%0.2f" % objective(buscaLocalSimplesMM())))
+
+
+#5 implementações
+print('Busca Tabu : ' + str("%0.2f" % objective(buscaTabu())))
+print('Busca Local Randomizada : ' + str("%0.2f" % objective(buscaLocalRandomizada(p=0))))
+print('Construção Repetida : ' + str("%0.2f" % objective(construcaoRepetida())))
+print('Guloso-K : ' + str("%0.2f" % objective(gulosoK(k=1))))
+print('Random Reestart : ' + str("%0.2f" % objective(randomReestart())))
+
+#6 Hibridos
+
+
