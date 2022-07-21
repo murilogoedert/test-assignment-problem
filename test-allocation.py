@@ -14,7 +14,7 @@ _distanceMatrix = []
 _similarityMatrix = []
 
 
-_maxIterations = 5000
+_maxIterations = 2000
 
 def readInstance(instance = False):
     global _numDesks, _numDistances, _numTests, _numEmptyDesks, _desks, _tests, _distanceMatrix, _similarityMatrix
@@ -145,15 +145,12 @@ def geraVizinhancaTrocaIndices(solucao):
 
 def geraVizinhancaTrocaProvas(solucao):
     vizinhanca = []
-    amostras = int(_numDesks)
     for i in range(len(solucao)):
         for teste in range(1, _numTests):
             newSol = solucao.copy()
             newSol[i] = teste
             if newSol != solucao:
                 vizinhanca.append(newSol)
-    
-    # print(len(vizinhanca))
     return vizinhanca
 
 def estrategiaMelhorVizinhoTrocaProvas(solucao, randSelection = False):
@@ -213,6 +210,8 @@ def estrategiaMelhorVizinhoNaoTabu(solucao, tabuTable, tabuTenure, iteraction, b
         indexChange = getIndexOfChangeProva(solucao, sol)
 
         if tabuTable[indexChange] > 0:
+            if score[2] < bestValue:
+                print('bão demais')
             if iteraction - tabuTenure > tabuTable[indexChange] or score[2] < bestValue: #aspiração
                 acceptedSolution = sol
                 tabuTable[indexChange] = iteraction
@@ -502,7 +501,7 @@ def construcaoRepetida(repeat = 4):
 #cutRange - percentual de piora tolerado, quando atingilo, volta a tenure para o valor inicial
 def tabuAutoTenure(solucao = False, initialTenure = 5 , tenureIncrement = 2, cycleRange = 60, cutRange = 20):
     if not solucao:
-        sol = heuristicaConstrutiva_2(True)
+        sol = heuristicaConstrutiva_1(True)
     else:
         sol = solucao.copy()
     
@@ -548,7 +547,7 @@ def tabuAutoTenure(solucao = False, initialTenure = 5 , tenureIncrement = 2, cyc
 
         if obj > min and ((100 * obj) / min) - 100 >= cutRange:
             tabuTenure = initialTenure
-            sol = perturbaSolucaoSwapTest(perturbaSolucaoSwapIndices(solMin, qtd=3))
+            sol = perturbaSolucaoSwapIndices(solMin, qtd=2)
             cycleCount = 0
 
     plot.plot(dataX, dataY)
@@ -566,14 +565,13 @@ def tabuAutoTenure(solucao = False, initialTenure = 5 , tenureIncrement = 2, cyc
 
 #5 implementações
 # print('Busca Tabu : ' + str("%0.2f" % objective(buscaTabu(tabuTenure=11))))
-print('Busca Tabu : ' + str("%0.2f" % objective(tabuAutoTenure(cycleRange=30, initialTenure=2, tenureIncrement=12, cutRange=4))))
+print('Busca Tabu : ' + str("%0.2f" % objective(tabuAutoTenure(cycleRange=38, initialTenure=1, tenureIncrement=1, cutRange=0.18))))
 # print('Busca Local Randomizada : ' + str("%0.2f" % objective(buscaLocalRandomizada(p=0))))
 # print('Construção Repetida : ' + str("%0.2f" % objective(construcaoRepetida())))
 # print('Guloso-K : ' + str("%0.2f" % objective(gulosoK(k=1))))
 # print('Random Reestart : ' + str("%0.2f" % objective(randomReestart())))
 
 #6 Hibridos
-
 print('best 64.40')
 
 
