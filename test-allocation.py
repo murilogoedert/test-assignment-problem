@@ -1,8 +1,8 @@
 from hashlib import md5
+from mimetypes import init
 import sys, re, random, time
 from os import walk
-import matplotlib.pyplot as plot
-
+import matplotlib.pyplot as plt
 
 _numDesks = 0
 _numDistances = 0
@@ -12,12 +12,14 @@ _desks = []
 _tests = []
 _distanceMatrix = []
 _similarityMatrix = []
+_instanceFile = 'instances/lab1_2x0.txt'
 
 
-_maxIterations = 2000
+_maxIterations = 700
 
-def readInstance(instance = False):
-    global _numDesks, _numDistances, _numTests, _numEmptyDesks, _desks, _tests, _distanceMatrix, _similarityMatrix
+
+def readInstance(instance=False):
+    global _numDesks, _numDistances, _numTests, _numEmptyDesks, _desks, _tests, _distanceMatrix, _similarityMatrix, _instanceFile
 
     _numDesks = 0
     _numDistances = 0
@@ -30,15 +32,14 @@ def readInstance(instance = False):
 
     if instance:
         file = open(instance)
-    elif(len(sys.argv) > 1):
+    elif (len(sys.argv) > 1):
+        _instanceFile = sys.argv[1]
         file = open(sys.argv[1])
     else:
-        # file = open('instances/lab3_2x0.txt')
-        file = open('instances/lab3_3x0.txt')
-        
-    
+        file = open(_instanceFile)
+
     lines = file.readlines()
-    sub = re.sub(' +', ' ', re.sub('\n', '', re.sub('\t', ' ', lines[0])));
+    sub = re.sub(' +', ' ', re.sub('\n', '', re.sub('\t', ' ', lines[0])))
     instanceParts = sub.split(' ')
 
     _numDesks = int(instanceParts[0])
@@ -49,7 +50,7 @@ def readInstance(instance = False):
     countLines = 0
     _desks = []
 
-    while(countLines < _numDesks):
+    while (countLines < _numDesks):
         _desks.append(int(lines[countLines + 1]))
         countLines += 1
 
@@ -57,9 +58,9 @@ def readInstance(instance = False):
 
     countLines += 1
 
-    while(countLines < (_numDistances + _numDesks + 1)):
+    while (countLines < (_numDistances + _numDesks + 1)):
         currentLine = lines[countLines]
-        lineParts = re.sub('\n', '', re.sub('\t', ' ', currentLine)).split(' ');
+        lineParts = re.sub('\n', '', re.sub('\t', ' ', currentLine)).split(' ')
         i = _desks.index(int(lineParts[0]))
         j = _desks.index(int(lineParts[1]))
         value = float(lineParts[2])
@@ -68,20 +69,31 @@ def readInstance(instance = False):
 
     _similarityMatrix = createMatrix(_numTests, _numTests)
 
-    while(countLines < len(lines)):
+    while (countLines < len(lines)):
         currentLine = lines[countLines]
 
-        lineParts = re.sub('\n', '', re.sub('\t', ' ', currentLine)).split(' ');
+        lineParts = re.sub('\n', '', re.sub('\t', ' ', currentLine)).split(' ')
         if len(lineParts) > 3:
-            lineParts = re.sub(' +', ' ', re.sub('\n', '', re.sub('\t', ' ', currentLine))).split(' ');
+            lineParts = re.sub(
+                ' +', ' ', re.sub('\n', '', re.sub('\t', ' ',
+                                                   currentLine))).split(' ')
         i = int(lineParts[0])
         j = int(lineParts[1])
         value = float(lineParts[2])
         _similarityMatrix[i][j] = value
         countLines += 1
 
+
 def orderFn(el):
     return float(el[1])
+
+
+# def commentPlot(x, y, text):
+#     ax.annotate('arc,\narms',
+#             xy=(2, 30),
+#             xycoords='data',
+#             textcoords='offset points',
+#             arrowprops=dict(arrowstyle="->"))
 
 def objective(sol):
     totalCost = 0
@@ -97,9 +109,11 @@ def objective(sol):
                     indexT2 = indexT1 - indexT2
                     indexT1 = indexT1 - indexT2
 
-                totalCost += _similarityMatrix[indexT1][indexT2] * _distanceMatrix[i][j]
+                totalCost += _similarityMatrix[indexT1][
+                    indexT2] * _distanceMatrix[i][j]
 
     return totalCost
+
 
 def removeEmptyDesks(solution):
     sol = solution.copy()
@@ -113,15 +127,15 @@ def removeEmptyDesks(solution):
                     newSol = sol.copy()
                     newSol[i] = 0
                     scores.append((i, best - objective(newSol)))
-            
+
             scores.sort(key=orderFn, reverse=True)
             sol[scores[0][0]] = 0
             count += 1
-            
-    return sol
- 
 
-def createMatrix(lines, columns, defValue = 0):
+    return sol
+
+
+def createMatrix(lines, columns, defValue=0):
     matrix = []
     for i in range(lines):
         line = []
@@ -129,6 +143,7 @@ def createMatrix(lines, columns, defValue = 0):
             line.append(defValue)
         matrix.append(line)
     return matrix
+
 
 def geraVizinhancaTrocaIndices(solucao):
     vizinhanca = []
@@ -143,6 +158,7 @@ def geraVizinhancaTrocaIndices(solucao):
 
     return vizinhanca
 
+
 def geraVizinhancaTrocaProvas(solucao):
     vizinhanca = []
     for i in range(len(solucao)):
@@ -153,11 +169,12 @@ def geraVizinhancaTrocaProvas(solucao):
                 vizinhanca.append(newSol)
     return vizinhanca
 
-def estrategiaMelhorVizinhoTrocaProvas(solucao, randSelection = False):
+
+def estrategiaMelhorVizinhoTrocaProvas(solucao, randSelection=False):
     vizinhanca = geraVizinhancaTrocaProvas(solucao)
     bestSolution = solucao
 
-    if(randSelection == False):
+    if (randSelection == False):
         bestValue = objective(solucao)
 
         for vizinho in vizinhanca:
@@ -171,13 +188,11 @@ def estrategiaMelhorVizinhoTrocaProvas(solucao, randSelection = False):
             obj = objective(vizinho)
             if list.count((vizinhanca.index(vizinho), obj)) == 0:
                 list.append((vizinhanca.index(vizinho), obj))
-        
 
         list.sort(key=orderFn)
         bestSolution = vizinhanca[random.choice(list[0:randSelection])[0]]
 
     return bestSolution
-
 
 
 def estrategiaMelhorVizinhoTrocaIndices(solucao):
@@ -193,7 +208,9 @@ def estrategiaMelhorVizinhoTrocaIndices(solucao):
 
     return bestSolution
 
-def estrategiaMelhorVizinhoNaoTabu(solucao, tabuTable, tabuTenure, iteraction, bestValue):
+
+def estrategiaMelhorVizinhoNaoTabu(solucao, tabuTable, tabuTenure, iteraction,
+                                   bestValue):
     actualValue = objective(solucao)
     vizinhanca = geraVizinhancaTrocaProvas(solucao)
     scores = []
@@ -201,7 +218,7 @@ def estrategiaMelhorVizinhoNaoTabu(solucao, tabuTable, tabuTenure, iteraction, b
         obj = objective(vizinho)
         # (solução, score, valor da função objetivo)
         scores.append((vizinho, actualValue - obj, obj))
-    
+
     scores.sort(key=orderFn, reverse=True)
     acceptedSolution = solucao
 
@@ -210,11 +227,13 @@ def estrategiaMelhorVizinhoNaoTabu(solucao, tabuTable, tabuTenure, iteraction, b
         indexChange = getIndexOfChangeProva(solucao, sol)
 
         if tabuTable[indexChange] > 0:
-            if score[2] < bestValue:
-                print('bão demais')
-            if iteraction - tabuTenure > tabuTable[indexChange] or score[2] < bestValue: #aspiração
+            if iteraction - tabuTenure > tabuTable[indexChange]:
                 acceptedSolution = sol
                 tabuTable[indexChange] = iteraction
+                break
+            elif score[2] < bestValue:  #aspiração
+                acceptedSolution = sol
+                tabuTable = [0 for i in range(0, _numDesks)]
                 break
         else:
             acceptedSolution = sol
@@ -223,13 +242,14 @@ def estrategiaMelhorVizinhoNaoTabu(solucao, tabuTable, tabuTenure, iteraction, b
 
     return acceptedSolution
 
-def perturbaSolucaoSwapIndices(solucao, qtd = 1):
+
+def perturbaSolucaoSwapIndices(solucao, qtd=1):
     sol = solucao.copy()
-    i = 0
-    j = 0
     cont = 0
     while cont < qtd:
-        while(i == j):
+        i = 0
+        j = 0
+        while (i == j):
             i = random.randint(0, len(sol) - 1)
             j = random.randint(0, len(sol) - 1)
 
@@ -240,6 +260,7 @@ def perturbaSolucaoSwapIndices(solucao, qtd = 1):
 
     return sol
 
+
 def perturbaSolucaoSwapTest(solucao):
     sol = solucao.copy()
     index = random.randint(0, len(sol) - 1)
@@ -248,20 +269,22 @@ def perturbaSolucaoSwapTest(solucao):
 
     test = sol[index]
     newTest = random.randint(1, _numTests - 1)
-    while(newTest == test):
-         newTest = random.randint(1, _numTests - 1)
+    while (newTest == test):
+        newTest = random.randint(1, _numTests - 1)
 
     sol[index] = newTest
 
     return sol
+
 
 def getIndexOfChangeProva(solucao1, solucao2):
     for index, (first, second) in enumerate(zip(solucao1, solucao2)):
         if first != second:
             return index
     return -1
-    
-def bestTestForIndex(solucao, indice, k = 0):
+
+
+def bestTestForIndex(solucao, indice, k=0):
     scores = []
     for i in range(1, _numTests):
         sol = solucao.copy()
@@ -278,14 +301,63 @@ def bestTestForIndex(solucao, indice, k = 0):
         k = len(scores)
 
     return scores[random.randint(0, k - 1)][0]
-        
+
+
+def testAllInstances():
+    f = []
+    for (dirpath, dirnames, filenames) in walk('instances/'):
+        f.extend(filenames)
+        break
+
+    for fileName in f:
+        testInstance(fileName)
+
+def testInstance(filename = False):
+    global _instanceFile
+
+    if filename:
+        _instanceFile = 'instances/' + filename
+
+    readInstance()
+
+    print('############################# instance: ' + _instanceFile + ' ##################################')
+
+    #5 primeiros
+    print('\n##### Heuristicas Construtivas #####')
+    print('Heurística I : ' + str("%0.2f" % objective(heuristicaConstrutiva_1(False))))
+    print('Heurística II : ' + str("%0.2f" % objective(heuristicaConstrutiva_2())))
+    print('\n##### Comparações #####')
+    print('Caminhada Aleatória : ' + str("%0.2f" % objective(caminhadaAleatoria())))
+    print('Busca Local Simples PM : ' + str("%0.2f" % objective(buscaLocalSimplesPM())))
+    print('Busca Local Simples MM : ' + str("%0.2f" % objective(buscaLocalSimplesMM())))
+
+    #5 implementações
+    print('\n##### 5 implementações #####')
+    print('Busca Tabu : ' + str("%0.2f" % objective(buscaTabu(tabuTenure=10, doPlot=False))))
+    print('Busca Local Randomizada : ' + str("%0.2f" % objective(buscaLocalRandomizada(p=0))))
+    print('Construção Repetida : ' + str("%0.2f" % objective(construcaoRepetida())))
+    print('Guloso-K : ' + str("%0.2f" % objective(gulosoK(k=1))))
+    print('Random Reestart : ' + str("%0.2f" % objective(randomReestart())))
+
+    #6 extras
+    print('\n##### 6 algoritmos hibridos #####')
+    print('"Auto-Tabu" : ' + str("%0.2f" % objective(tabuAutoTenure(cycleRange=12, initialTenure=1, tenureIncrement=2, cutRange=25, doPlot=False))))
+    print('Tabu + Guloso-K : ' + str("%0.2f" % objective(tabuComGulosoK())))
+    print('Tabu + Construcao Repetida : ' + str("%0.2f" % objective(tabuComConstrucaoRepetida())))
+    print('Random Reestart + Guloso-K : ' + str("%0.2f" % objective(randomRestartComGulosoK())))
+    print('Construção Repetida + Guloso-K : ' + str("%0.2f" % objective(construcaoRepetidaComGulosoK())))
+    print('Construção Repetida + Perturbação : ' + str("%0.2f" % objective(construcaoRepetidaComPerturbacao())))
+
+    print('\n##################################################################################################')
+
 
 #################################
 ####Heurísticas Construtivas#####
 #################################
 
+
 #Totalmente randomica
-def heuristicaConstrutiva_1(full = False):
+def heuristicaConstrutiva_1(full=False):
     readInstance()
     solution = [0 for i in range(_numDesks)]
 
@@ -297,7 +369,8 @@ def heuristicaConstrutiva_1(full = False):
 
     return removeEmptyDesks(solution)
 
-def gulosoK(k = 3, full = False):
+
+def gulosoK(k=3, full=False):
     readInstance()
     solution = [0 for i in range(_numDesks)]
 
@@ -306,25 +379,25 @@ def gulosoK(k = 3, full = False):
 
     if full:
         return solution
-    
+
     return removeEmptyDesks(solution)
-    
 
 
 #Utiliza a primeira heurística para criar uma solução inicial aleatória sem nenhuma carteira vazia
 #Após isso vai removendo da solução as N provas que mais diminuiem o valor da função objetivo
-def heuristicaConstrutiva_2(full = False):
+def heuristicaConstrutiva_2(full=False):
     readInstance()
     sol = [random.randint(1, _numTests - 1) for i in range(0, _numDesks)]
     if full:
         return sol
-    
+
     return removeEmptyDesks(sol)
 
 
 #################################
 ########## Comparações ##########
 #################################
+
 
 def buscaLocalSimplesPM(solucao=False):
     if not solucao:
@@ -338,49 +411,50 @@ def buscaLocalSimplesPM(solucao=False):
         vizinhos = geraVizinhancaTrocaProvas(solucao)
         for vizinho in vizinhos:
             obj = objective(vizinho)
-            if(obj < value):
+            if (obj < value):
                 value = obj
                 melhorou = True
                 bestSolution = vizinho
-        
+
         if melhorou:
             break
 
     return removeEmptyDesks(bestSolution)
+
 
 def buscaLocalSimplesMM(solucao=False):
     if not solucao:
         sol = heuristicaConstrutiva_1(True)
     else:
         sol = solucao.copy()
-    
+
     bestValue = objective(sol)
-    
+
     stop = False
     iter = 0
-    while(not stop):
+    while (not stop):
         iter += 1
         vizinhos = geraVizinhancaTrocaProvas(sol)
         melhorou = False
         for vizinho in vizinhos:
             obj = objective(vizinho)
-            if(obj < bestValue):
+            if (obj < bestValue):
                 bestValue = obj
                 melhorou = True
                 sol = vizinho
-
 
         if not melhorou:
             stop = True
 
     return removeEmptyDesks(sol)
 
-def randomReestart(solucao=False, reestarts = 200):
+
+def randomReestart(solucao=False, reestarts=15, doPlot=False):
     if not solucao:
         sol = heuristicaConstrutiva_2(full=True)
     else:
         sol = solucao.copy()
-    
+
     bestSolution = sol
     bestValue = objective(sol)
 
@@ -391,10 +465,11 @@ def randomReestart(solucao=False, reestarts = 200):
 
     cont = 0
     while reestartCount < reestarts:
-        pX.append(cont)
         newSol = buscaLocalSimplesMM(sol)
         obj = objective(newSol)
-        pY.append(obj)
+        if doPlot:
+            pX.append(cont)
+            pY.append(obj)
         if obj < bestValue:
             bestValue = obj
             sol = newSol
@@ -404,19 +479,19 @@ def randomReestart(solucao=False, reestarts = 200):
             reestartCount += 1
 
         cont += 1
-        
-    plot.plot(pX, pY)
-    plot.show()
+    if doPlot:
+        plt.plot(pX, pY)
+        plt.show()
 
     return removeEmptyDesks(bestSolution)
-    
+
 
 def caminhadaAleatoria(solucao=False):
     if not solucao:
         sol = heuristicaConstrutiva_1(True)
     else:
         sol = solucao.copy()
-    
+
     bestValue = objective(sol)
 
     for i in range(_maxIterations):
@@ -427,38 +502,40 @@ def caminhadaAleatoria(solucao=False):
 
         obj = objective(newSol)
 
-        if(obj < bestValue):
+        if (obj < bestValue):
             sol = newSol
             bestValue = obj
 
     return removeEmptyDesks(sol)
 
-def buscaLocalRandomizada(p = 0, solucao=False):
+
+def buscaLocalRandomizada(p=0, solucao=False):
     if not solucao:
-        solucao = heuristicaConstrutiva_1(True)
-    
+        solucao = heuristicaConstrutiva_2(True)
+
     bestValue = objective(solucao)
     bestSolution = solucao
     concumbente = solucao
-    
-    for i in range(_maxIterations):      
+
+    for i in range(_maxIterations):
         r = random.randint(0, 1)
         if r <= p:
             concumbente = perturbaSolucaoSwapIndices(concumbente)
         else:
             concumbente = estrategiaMelhorVizinhoTrocaIndices(concumbente)
 
-        if(objective(concumbente) < bestValue):
+        if (objective(concumbente) < bestValue):
             bestSolution = concumbente
 
     return removeEmptyDesks(bestSolution)
 
-def buscaTabu(solucao=False, tabuTenure = 5):
+
+def buscaTabu(solucao=False, tabuTenure=5, doPlot=False):
     if not solucao:
         sol = heuristicaConstrutiva_2(True)
     else:
         sol = solucao.copy()
-    
+
     dataX = []
     dataY = []
 
@@ -469,50 +546,87 @@ def buscaTabu(solucao=False, tabuTenure = 5):
     for i in range(_maxIterations):
         sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, i, bestValue)
         obj = objective(sol)
-        dataY.append(objective(removeEmptyDesks((sol))))
-        dataX.append(i)
+
+        if doPlot:
+            dataY.append(objective(removeEmptyDesks((sol))))
+            dataX.append(i)
+
         if obj < bestValue:
             bestValue = obj
             bestSolution = sol
 
-    plot.plot(dataX, dataY)
-    plot.show()
+    if doPlot:
+        plt.plot(dataX, dataY)
+        plt.show()
+
     return removeEmptyDesks(bestSolution)
 
-def construcaoRepetida(repeat = 4):
-    bestSolution = gulosoK(k=3, full=True)
+
+def construcaoRepetida(repeat=10):
+    bestSolution = heuristicaConstrutiva_2(full=True)
     bestValue = objective(bestSolution)
     sol = bestSolution
     for i in range(repeat):
         newSol = buscaLocalSimplesMM(solucao=sol)
         obj = objective(newSol)
-        if obj < bestValue or bestSolution == False: 
+        if obj < bestValue or bestSolution == False:
             bestSolution = newSol
             bestValue = obj
-        sol = gulosoK(k=3, full=True)
-    
+        sol = heuristicaConstrutiva_2(full=True)
+
     return removeEmptyDesks(bestSolution)
 
+def construcaoRepetidaComGulosoK(repeat=10):
+    bestSolution = gulosoK(k=2, full=True)
+    bestValue = objective(bestSolution)
+    sol = bestSolution
+    for i in range(repeat):
+        newSol = buscaLocalSimplesMM(solucao=sol)
+        obj = objective(newSol)
+        if obj < bestValue or bestSolution == False:
+            bestSolution = newSol
+            bestValue = obj
+        sol = gulosoK(k=2, full=True)
+
+    return removeEmptyDesks(bestSolution)
+
+def construcaoRepetidaComPerturbacao(repeat=15):
+    bestSolution = heuristicaConstrutiva_2(full=True)
+    bestValue = objective(bestSolution)
+    sol = bestSolution
+    for i in range(repeat):
+        sol = perturbaSolucaoSwapTest(sol)
+        newSol = buscaLocalSimplesMM(solucao=sol)
+        obj = objective(newSol)
+        if obj < bestValue or bestSolution == False:
+            bestSolution = newSol
+            bestValue = obj
+        sol = heuristicaConstrutiva_2(full=True)
+
+    return removeEmptyDesks(bestSolution)
 
 
 #initialTenure - Valor inicial da tabu tenure
 #tenureIncrement - A cada ciclo, caso não haja melhora, incrementa este valor na tenure
-#cycleRange - Quantidade permitida de iterações sem melhora 
+#cycleRange - Quantidade permitida de iterações sem melhora
 #cutRange - percentual de piora tolerado, quando atingilo, volta a tenure para o valor inicial
-def tabuAutoTenure(solucao = False, initialTenure = 5 , tenureIncrement = 2, cycleRange = 60, cutRange = 20):
+def tabuAutoTenure(solucao=False,
+                   initialTenure=5,
+                   tenureIncrement=2,
+                   cycleRange=60,
+                   cutRange=20,
+                   doPlot = True):
     if not solucao:
         sol = heuristicaConstrutiva_1(True)
     else:
         sol = solucao.copy()
-    
+
     dataX = []
     dataY = []
 
     bestSolution = sol
     initialSolution = sol
     bestValue = objective(sol)
-
-    print('initial - ' + str(bestValue))
 
     tabuTable = [0 for i in range(_numDesks)]
     tabuTenure = initialTenure
@@ -521,10 +635,12 @@ def tabuAutoTenure(solucao = False, initialTenure = 5 , tenureIncrement = 2, cyc
     solMin = initialSolution
     initialValue = bestValue
     cycleCount = 0
+    bestPoints = []
 
     for i in range(_maxIterations):
         cycleCount += 1
-        sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, i, bestValue)
+        sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, i,
+                                             bestValue)
         obj = objective(sol)
 
         #atualiza os minimos, quando atualiza, zera o contador
@@ -534,8 +650,10 @@ def tabuAutoTenure(solucao = False, initialTenure = 5 , tenureIncrement = 2, cyc
             solMin = sol
             cycleCount = 0
 
-        dataY.append(objective(removeEmptyDesks(sol)))
-        dataX.append(i)
+        if doPlot:
+            realSol = obj#objective(removeEmptyDesks(sol))
+            dataY.append(realSol)
+            dataX.append(i)
 
         if obj < bestValue:
             bestValue = obj
@@ -547,33 +665,59 @@ def tabuAutoTenure(solucao = False, initialTenure = 5 , tenureIncrement = 2, cyc
 
         if obj > min and ((100 * obj) / min) - 100 >= cutRange:
             tabuTenure = initialTenure
-            sol = perturbaSolucaoSwapIndices(solMin, qtd=2)
             cycleCount = 0
+            sol = perturbaSolucaoSwapIndices(solMin, qtd=2)
 
-    plot.plot(dataX, dataY)
-    plot.show()
+    if doPlot:
+        plt.plot(dataX, dataY)
+        plt.show()
+
     return removeEmptyDesks(bestSolution)
-    
 
-#5 primeiros
-# print('Heurística I : ' + str("%0.2f" % objective(heuristicaConstrutiva_1(False))))
-# print('Heurística II : ' + str("%0.2f" % objective(heuristicaConstrutiva_2()))) 
-# print('Caminhada Aleatória : ' + str("%0.2f" % objective(caminhadaAleatoria())))
-# print('Busca Local Simples PM : ' + str("%0.2f" % objective(buscaLocalSimplesPM())))
-# print('Busca Local Simples MM : ' + str("%0.2f" % objective(buscaLocalSimplesMM())))
+def tabuComGulosoK():
+    solucao = gulosoK(k = 3)
+    return buscaTabu(solucao, tabuTenure=4)
+
+def tabuComConstrucaoRepetida():
+    solucao = construcaoRepetida(repeat=6)
+    return buscaTabu(solucao)
+
+def randomRestartComGulosoK(solucao = False, reestarts=10, doPlot = False):
+    if not solucao:
+        sol = gulosoK(full=True, k=2)
+    else:
+        sol = solucao.copy()
+
+    bestSolution = sol
+    bestValue = objective(sol)
+
+    reestartCount = 0
+
+    pX = []
+    pY = []
+
+    cont = 0
+    while reestartCount < reestarts:
+        newSol = buscaLocalSimplesMM(sol)
+        obj = objective(newSol)
+        if doPlot:
+            pX.append(cont)
+            pY.append(obj)
+        if obj < bestValue:
+            bestValue = obj
+            sol = newSol
+            bestSolution = sol
+        else:
+            sol = gulosoK(full=True, k=2)
+            reestartCount += 1
+
+        cont += 1
+    if doPlot:
+        plt.plot(pX, pY)
+        plt.show()
+
+    return removeEmptyDesks(bestSolution)
 
 
-#5 implementações
-# print('Busca Tabu : ' + str("%0.2f" % objective(buscaTabu(tabuTenure=11))))
-print('Busca Tabu : ' + str("%0.2f" % objective(tabuAutoTenure(cycleRange=38, initialTenure=1, tenureIncrement=1, cutRange=0.18))))
-# print('Busca Local Randomizada : ' + str("%0.2f" % objective(buscaLocalRandomizada(p=0))))
-# print('Construção Repetida : ' + str("%0.2f" % objective(construcaoRepetida())))
-# print('Guloso-K : ' + str("%0.2f" % objective(gulosoK(k=1))))
-# print('Random Reestart : ' + str("%0.2f" % objective(randomReestart())))
 
-#6 Hibridos
-print('best 64.40')
-
-
-
-
+testInstance()

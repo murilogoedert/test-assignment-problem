@@ -1,0 +1,970 @@
+############################# instance: instances/lab1_2x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 20.90
+Heurística II : 25.70
+
+##### Comparações #####
+Caminhada Aleatória : 20.90
+Busca Local Simples PM : 20.90
+Busca Local Simples MM : 20.90
+
+##### 5 implementações #####
+Busca Tabu : 20.90
+Busca Local Randomizada : 23.85
+Construção Repetida : 21.05
+Guloso-K : 20.90
+Random Reestart : 21.00
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 20.90
+Tabu + Guloso-K : 20.90
+Tabu + Construcao Repetida : 20.90
+Random Reestart + Guloso-K : 21.00
+Construção Repetida + Guloso-K : 20.90
+Construção Repetida + Perturbação : 21.00
+
+##################################################################################################
+############################# instance: instances/lab1_2x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 2.20
+Heurística II : 2.15
+
+##### Comparações #####
+Caminhada Aleatória : 2.20
+Busca Local Simples PM : 2.20
+Busca Local Simples MM : 2.20
+
+##### 5 implementações #####
+Busca Tabu : 2.20
+Busca Local Randomizada : 2.20
+Construção Repetida : 2.00
+Guloso-K : 2.20
+Random Reestart : 1.85
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 2.20
+Tabu + Guloso-K : 2.40
+Tabu + Construcao Repetida : 2.00
+Random Reestart + Guloso-K : 2.05
+Construção Repetida + Guloso-K : 2.00
+Construção Repetida + Perturbação : 2.00
+
+##################################################################################################
+############################# instance: instances/lab1_2x5.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 8.60
+Heurística II : 10.95
+
+##### Comparações #####
+Caminhada Aleatória : 8.60
+Busca Local Simples PM : 8.60
+Busca Local Simples MM : 8.60
+
+##### 5 implementações #####
+Busca Tabu : 8.60
+Busca Local Randomizada : 8.25
+Construção Repetida : 8.45
+Guloso-K : 8.60
+Random Reestart : 8.15
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 8.60
+Tabu + Guloso-K : 8.30
+Tabu + Construcao Repetida : 8.10
+Random Reestart + Guloso-K : 7.95
+Construção Repetida + Guloso-K : 8.15
+Construção Repetida + Perturbação : 8.25
+
+##################################################################################################
+############################# instance: instances/lab1_3x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 15.66
+Heurística II : 22.15
+
+##### Comparações #####
+Caminhada Aleatória : 15.52
+Busca Local Simples PM : 15.63
+Busca Local Simples MM : 15.56
+
+##### 5 implementações #####
+Busca Tabu : 15.35
+Busca Local Randomizada : 16.29
+Construção Repetida : 15.45
+Guloso-K : 15.66
+Random Reestart : 15.35
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 15.15
+Tabu + Guloso-K : 15.35
+Tabu + Construcao Repetida : 15.15
+Random Reestart + Guloso-K : 15.45
+Construção Repetida + Guloso-K : 15.35
+Construção Repetida + Perturbação : 15.35
+
+##################################################################################################
+############################# instance: instances/lab1_3x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 1.42
+Heurística II : 1.92
+
+##### Comparações #####
+Caminhada Aleatória : 1.45
+Busca Local Simples PM : 1.65
+Busca Local Simples MM : 1.45
+
+##### 5 implementações #####
+Busca Tabu : 1.35
+Busca Local Randomizada : 1.49
+Construção Repetida : 1.25
+Guloso-K : 1.42
+Random Reestart : 1.32
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 1.45
+Tabu + Guloso-K : 1.32
+Tabu + Construcao Repetida : 1.32
+Random Reestart + Guloso-K : 1.32
+Construção Repetida + Guloso-K : 1.32
+Construção Repetida + Perturbação : 1.32
+
+##################################################################################################
+############################# instance: instances/lab1_3x5.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 6.15
+Heurística II : 8.16
+
+##### Comparações #####
+Caminhada Aleatória : 5.85
+Busca Local Simples PM : 6.31
+Busca Local Simples MM : 5.95
+
+##### 5 implementações #####
+Busca Tabu : 6.18
+Busca Local Randomizada : 7.04
+Construção Repetida : 5.78
+Guloso-K : 6.15
+Random Reestart : 5.58
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 5.75
+Tabu + Guloso-K : 6.25
+Tabu + Construcao Repetida : 5.85
+Random Reestart + Guloso-K : 5.58
+Construção Repetida + Guloso-K : 5.98
+Construção Repetida + Perturbação : 5.58
+
+##################################################################################################
+############################# instance: instances/lab1_4x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 12.47
+Heurística II : 16.55
+
+##### Comparações #####
+Caminhada Aleatória : 12.35
+Busca Local Simples PM : 12.47
+Busca Local Simples MM : 12.47
+
+##### 5 implementações #####
+Busca Tabu : 12.05
+Busca Local Randomizada : 16.08
+Construção Repetida : 12.38
+Guloso-K : 12.47
+Random Reestart : 12.17
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 12.35
+Tabu + Guloso-K : 12.62
+Tabu + Construcao Repetida : 12.32
+Random Reestart + Guloso-K : 12.38
+Construção Repetida + Guloso-K : 12.23
+Construção Repetida + Perturbação : 12.28
+
+##################################################################################################
+############################# instance: instances/lab1_4x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 1.25
+Heurística II : 1.15
+
+##### Comparações #####
+Caminhada Aleatória : 1.07
+Busca Local Simples PM : 1.25
+Busca Local Simples MM : 1.25
+
+##### 5 implementações #####
+Busca Tabu : 1.17
+Busca Local Randomizada : 1.27
+Construção Repetida : 1.00
+Guloso-K : 1.25
+Random Reestart : 1.00
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 1.10
+Tabu + Guloso-K : 1.12
+Tabu + Construcao Repetida : 1.05
+Random Reestart + Guloso-K : 1.00
+Construção Repetida + Guloso-K : 1.00
+Construção Repetida + Perturbação : 0.95
+
+##################################################################################################
+############################# instance: instances/lab1_4x5.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 4.78
+Heurística II : 8.00
+
+##### Comparações #####
+Caminhada Aleatória : 4.62
+Busca Local Simples PM : 4.78
+Busca Local Simples MM : 4.78
+
+##### 5 implementações #####
+Busca Tabu : 4.50
+Busca Local Randomizada : 5.83
+Construção Repetida : 4.40
+Guloso-K : 4.78
+Random Reestart : 4.28
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 4.43
+Tabu + Guloso-K : 4.05
+Tabu + Construcao Repetida : 4.33
+Random Reestart + Guloso-K : 4.33
+Construção Repetida + Guloso-K : 4.55
+Construção Repetida + Perturbação : 4.22
+
+##################################################################################################
+############################# instance: instances/lab2_2x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 75.15
+Heurística II : 86.25
+
+##### Comparações #####
+Caminhada Aleatória : 75.15
+Busca Local Simples PM : 75.15
+Busca Local Simples MM : 75.15
+
+##### 5 implementações #####
+Busca Tabu : 74.10
+Busca Local Randomizada : 75.15
+Construção Repetida : 74.55
+Guloso-K : 75.15
+Random Reestart : 75.15
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 74.55
+Tabu + Guloso-K : 74.05
+Tabu + Construcao Repetida : 74.15
+Random Reestart + Guloso-K : 75.20
+Construção Repetida + Guloso-K : 75.40
+Construção Repetida + Perturbação : 75.05
+
+##################################################################################################
+############################# instance: instances/lab2_2x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 45.90
+Heurística II : 49.00
+
+##### Comparações #####
+Caminhada Aleatória : 45.75
+Busca Local Simples PM : 45.90
+Busca Local Simples MM : 45.90
+
+##### 5 implementações #####
+Busca Tabu : 44.10
+Busca Local Randomizada : 43.85
+Construção Repetida : 44.90
+Guloso-K : 45.90
+Random Reestart : 43.95
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 44.65
+Tabu + Guloso-K : 44.50
+Tabu + Construcao Repetida : 43.65
+Random Reestart + Guloso-K : 44.45
+Construção Repetida + Guloso-K : 44.50
+Construção Repetida + Perturbação : 44.20
+
+##################################################################################################
+############################# instance: instances/lab2_2x20.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 25.45
+Heurística II : 25.10
+
+##### Comparações #####
+Caminhada Aleatória : 25.30
+Busca Local Simples PM : 25.45
+Busca Local Simples MM : 25.45
+
+##### 5 implementações #####
+Busca Tabu : 24.60
+Busca Local Randomizada : 24.80
+Construção Repetida : 22.60
+Guloso-K : 25.45
+Random Reestart : 22.85
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 24.00
+Tabu + Guloso-K : 22.55
+Tabu + Construcao Repetida : 22.75
+Random Reestart + Guloso-K : 22.65
+Construção Repetida + Guloso-K : 22.75
+Construção Repetida + Perturbação : 22.95
+
+##################################################################################################
+############################# instance: instances/lab2_3x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 56.35
+Heurística II : 66.25
+
+##### Comparações #####
+Caminhada Aleatória : 56.11
+Busca Local Simples PM : 56.31
+Busca Local Simples MM : 56.31
+
+##### 5 implementações #####
+Busca Tabu : 54.51
+Busca Local Randomizada : 59.90
+Construção Repetida : 55.95
+Guloso-K : 56.35
+Random Reestart : 55.59
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 55.56
+Tabu + Guloso-K : 55.54
+Tabu + Construcao Repetida : 54.62
+Random Reestart + Guloso-K : 55.73
+Construção Repetida + Guloso-K : 55.36
+Construção Repetida + Perturbação : 55.57
+
+##################################################################################################
+############################# instance: instances/lab2_3x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 32.62
+Heurística II : 42.66
+
+##### Comparações #####
+Caminhada Aleatória : 32.51
+Busca Local Simples PM : 32.51
+Busca Local Simples MM : 32.51
+
+##### 5 implementações #####
+Busca Tabu : 31.35
+Busca Local Randomizada : 32.87
+Construção Repetida : 31.48
+Guloso-K : 32.62
+Random Reestart : 31.45
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 32.06
+Tabu + Guloso-K : 34.62
+Tabu + Construcao Repetida : 31.61
+Random Reestart + Guloso-K : 31.60
+Construção Repetida + Guloso-K : 31.74
+Construção Repetida + Perturbação : 31.44
+
+##################################################################################################
+############################# instance: instances/lab2_3x20.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 17.25
+Heurística II : 20.70
+
+##### Comparações #####
+Caminhada Aleatória : 16.69
+Busca Local Simples PM : 16.69
+Busca Local Simples MM : 16.69
+
+##### 5 implementações #####
+Busca Tabu : 15.99
+Busca Local Randomizada : 16.66
+Construção Repetida : 16.16
+Guloso-K : 17.25
+Random Reestart : 15.86
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 16.80
+Tabu + Guloso-K : 17.48
+Tabu + Construcao Repetida : 15.63
+Random Reestart + Guloso-K : 15.66
+Construção Repetida + Guloso-K : 16.43
+Construção Repetida + Perturbação : 16.09
+
+##################################################################################################
+############################# instance: instances/lab2_4x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 46.45
+Heurística II : 60.30
+
+##### Comparações #####
+Caminhada Aleatória : 46.15
+Busca Local Simples PM : 46.30
+Busca Local Simples MM : 46.15
+
+##### 5 implementações #####
+Busca Tabu : 44.27
+Busca Local Randomizada : 50.63
+Construção Repetida : 44.32
+Guloso-K : 46.45
+Random Reestart : 44.57
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 44.73
+Tabu + Guloso-K : 45.60
+Tabu + Construcao Repetida : 43.35
+Random Reestart + Guloso-K : 45.10
+Construção Repetida + Guloso-K : 45.30
+Construção Repetida + Perturbação : 45.30
+
+##################################################################################################
+############################# instance: instances/lab2_4x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 27.35
+Heurística II : 33.90
+
+##### Comparações #####
+Caminhada Aleatória : 26.62
+Busca Local Simples PM : 27.35
+Busca Local Simples MM : 26.85
+
+##### 5 implementações #####
+Busca Tabu : 25.00
+Busca Local Randomizada : 29.90
+Construção Repetida : 25.15
+Guloso-K : 27.35
+Random Reestart : 24.55
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 25.57
+Tabu + Guloso-K : 26.27
+Tabu + Construcao Repetida : 25.45
+Random Reestart + Guloso-K : 25.17
+Construção Repetida + Guloso-K : 24.95
+Construção Repetida + Perturbação : 25.37
+
+##################################################################################################
+############################# instance: instances/lab2_4x20.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 14.93
+Heurística II : 17.32
+
+##### Comparações #####
+Caminhada Aleatória : 14.47
+Busca Local Simples PM : 14.98
+Busca Local Simples MM : 14.65
+
+##### 5 implementações #####
+Busca Tabu : 12.52
+Busca Local Randomizada : 14.97
+Construção Repetida : 12.13
+Guloso-K : 14.93
+Random Reestart : 11.20
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 13.30
+Tabu + Guloso-K : 12.95
+Tabu + Construcao Repetida : 12.27
+Random Reestart + Guloso-K : 11.97
+Construção Repetida + Guloso-K : 12.85
+Construção Repetida + Perturbação : 12.43
+
+##################################################################################################
+############################# instance: instances/lab3_2x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 112.75
+Heurística II : 127.10
+
+##### Comparações #####
+Caminhada Aleatória : 110.70
+Busca Local Simples PM : 112.45
+Busca Local Simples MM : 111.90
+
+##### 5 implementações #####
+Busca Tabu : 110.20
+Busca Local Randomizada : 112.10
+Construção Repetida : 110.75
+Guloso-K : 112.75
+Random Reestart : 111.05
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 109.75
+Tabu + Guloso-K : 110.65
+Tabu + Construcao Repetida : 110.35
+Random Reestart + Guloso-K : 111.20
+Construção Repetida + Guloso-K : 110.90
+Construção Repetida + Perturbação : 110.70
+
+##################################################################################################
+############################# instance: instances/lab3_2x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 75.95
+Heurística II : 79.15
+
+##### Comparações #####
+Caminhada Aleatória : 74.80
+Busca Local Simples PM : 75.95
+Busca Local Simples MM : 76.05
+
+##### 5 implementações #####
+Busca Tabu : 71.90
+Busca Local Randomizada : 73.60
+Construção Repetida : 72.90
+Guloso-K : 75.95
+Random Reestart : 72.80
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 74.15
+Tabu + Guloso-K : 73.25
+Tabu + Construcao Repetida : 72.25
+Random Reestart + Guloso-K : 72.70
+Construção Repetida + Guloso-K : 72.70
+Construção Repetida + Perturbação : 73.00
+
+##################################################################################################
+############################# instance: instances/lab3_2x20.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 48.85
+Heurística II : 47.27
+
+##### Comparações #####
+Caminhada Aleatória : 47.12
+Busca Local Simples PM : 48.85
+Busca Local Simples MM : 48.65
+
+##### 5 implementações #####
+Busca Tabu : 44.62
+Busca Local Randomizada : 45.47
+Construção Repetida : 44.52
+Guloso-K : 48.85
+Random Reestart : 43.82
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 48.17
+Tabu + Guloso-K : 44.95
+Tabu + Construcao Repetida : 44.15
+Random Reestart + Guloso-K : 44.52
+Construção Repetida + Guloso-K : 44.42
+Construção Repetida + Perturbação : 45.32
+
+##################################################################################################
+############################# instance: instances/lab3_3x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 80.97
+Heurística II : 112.78
+
+##### Comparações #####
+Caminhada Aleatória : 80.70
+Busca Local Simples PM : 80.77
+Busca Local Simples MM : 80.70
+
+##### 5 implementações #####
+Busca Tabu : 81.65
+Busca Local Randomizada : 83.92
+Construção Repetida : 82.06
+Guloso-K : 80.97
+Random Reestart : 81.64
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 80.70
+Tabu + Guloso-K : 83.62
+Tabu + Construcao Repetida : 81.73
+Random Reestart + Guloso-K : 82.03
+Construção Repetida + Guloso-K : 82.82
+Construção Repetida + Perturbação : 81.68
+
+##################################################################################################
+############################# instance: instances/lab3_3x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 52.26
+Heurística II : 63.39
+
+##### Comparações #####
+Caminhada Aleatória : 51.76
+Busca Local Simples PM : 52.26
+Busca Local Simples MM : 51.76
+
+##### 5 implementações #####
+Busca Tabu : 51.60
+Busca Local Randomizada : 54.68
+Construção Repetida : 51.94
+Guloso-K : 52.26
+Random Reestart : 51.04
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 51.76
+Tabu + Guloso-K : 51.59
+Tabu + Construcao Repetida : 50.75
+Random Reestart + Guloso-K : 52.10
+Construção Repetida + Guloso-K : 52.39
+Construção Repetida + Perturbação : 51.32
+
+##################################################################################################
+############################# instance: instances/lab3_3x20.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 31.70
+Heurística II : 42.19
+
+##### Comparações #####
+Caminhada Aleatória : 31.53
+Busca Local Simples PM : 31.70
+Busca Local Simples MM : 31.53
+
+##### 5 implementações #####
+Busca Tabu : 32.53
+Busca Local Randomizada : 33.45
+Construção Repetida : 31.98
+Guloso-K : 31.70
+Random Reestart : 30.96
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 31.53
+Tabu + Guloso-K : 33.37
+Tabu + Construcao Repetida : 30.94
+Random Reestart + Guloso-K : 31.58
+Construção Repetida + Guloso-K : 31.65
+Construção Repetida + Perturbação : 30.91
+
+##################################################################################################
+############################# instance: instances/lab3_4x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 65.43
+Heurística II : 92.46
+
+##### Comparações #####
+Caminhada Aleatória : 65.05
+Busca Local Simples PM : 64.98
+Busca Local Simples MM : 64.68
+
+##### 5 implementações #####
+Busca Tabu : 65.83
+Busca Local Randomizada : 66.86
+Construção Repetida : 65.30
+Guloso-K : 65.43
+Random Reestart : 66.43
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 64.68
+Tabu + Guloso-K : 67.51
+Tabu + Construcao Repetida : 66.40
+Random Reestart + Guloso-K : 66.85
+Construção Repetida + Guloso-K : 66.23
+Construção Repetida + Perturbação : 66.45
+
+##################################################################################################
+############################# instance: instances/lab3_4x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 40.20
+Heurística II : 57.50
+
+##### Comparações #####
+Caminhada Aleatória : 39.77
+Busca Local Simples PM : 40.20
+Busca Local Simples MM : 39.95
+
+##### 5 implementações #####
+Busca Tabu : 41.70
+Busca Local Randomizada : 49.93
+Construção Repetida : 40.17
+Guloso-K : 40.20
+Random Reestart : 39.95
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 39.95
+Tabu + Guloso-K : 42.93
+Tabu + Construcao Repetida : 39.30
+Random Reestart + Guloso-K : 40.60
+Construção Repetida + Guloso-K : 40.95
+Construção Repetida + Perturbação : 40.97
+
+##################################################################################################
+############################# instance: instances/lab3_4x20.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 23.69
+Heurística II : 33.99
+
+##### Comparações #####
+Caminhada Aleatória : 23.91
+Busca Local Simples PM : 23.69
+Busca Local Simples MM : 23.86
+
+##### 5 implementações #####
+Busca Tabu : 23.59
+Busca Local Randomizada : 28.05
+Construção Repetida : 23.67
+Guloso-K : 23.69
+Random Reestart : 23.34
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 23.86
+Tabu + Guloso-K : 24.61
+Tabu + Construcao Repetida : 23.36
+Random Reestart + Guloso-K : 24.60
+Construção Repetida + Guloso-K : 24.12
+Construção Repetida + Perturbação : 24.16
+
+##################################################################################################
+############################# instance: instances/lab6b_2x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 74.45
+Heurística II : 79.50
+
+##### Comparações #####
+Caminhada Aleatória : 74.45
+Busca Local Simples PM : 74.45
+Busca Local Simples MM : 74.45
+
+##### 5 implementações #####
+Busca Tabu : 72.75
+Busca Local Randomizada : 73.10
+Construção Repetida : 73.80
+Guloso-K : 74.45
+Random Reestart : 73.75
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 72.75
+Tabu + Guloso-K : 73.35
+Tabu + Construcao Repetida : 72.65
+Random Reestart + Guloso-K : 73.80
+Construção Repetida + Guloso-K : 73.30
+Construção Repetida + Perturbação : 73.45
+
+##################################################################################################
+############################# instance: instances/lab6b_2x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 37.25
+Heurística II : 39.75
+
+##### Comparações #####
+Caminhada Aleatória : 37.25
+Busca Local Simples PM : 37.25
+Busca Local Simples MM : 37.25
+
+##### 5 implementações #####
+Busca Tabu : 36.35
+Busca Local Randomizada : 38.00
+Construção Repetida : 36.55
+Guloso-K : 37.25
+Random Reestart : 36.45
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 36.80
+Tabu + Guloso-K : 36.35
+Tabu + Construcao Repetida : 35.75
+Random Reestart + Guloso-K : 36.55
+Construção Repetida + Guloso-K : 36.55
+Construção Repetida + Perturbação : 36.45
+
+##################################################################################################
+############################# instance: instances/lab6b_2x20.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 15.05
+Heurística II : 16.00
+
+##### Comparações #####
+Caminhada Aleatória : 15.05
+Busca Local Simples PM : 15.05
+Busca Local Simples MM : 15.05
+
+##### 5 implementações #####
+Busca Tabu : 14.05
+Busca Local Randomizada : 14.40
+Construção Repetida : 13.35
+Guloso-K : 15.05
+Random Reestart : 13.25
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 13.90
+Tabu + Guloso-K : 14.95
+Tabu + Construcao Repetida : 13.80
+Random Reestart + Guloso-K : 13.55
+Construção Repetida + Guloso-K : 14.00
+Construção Repetida + Perturbação : 13.80
+
+##################################################################################################
+############################# instance: instances/lab6b_3x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 55.83
+Heurística II : 78.81
+
+##### Comparações #####
+Caminhada Aleatória : 55.32
+Busca Local Simples PM : 55.79
+Busca Local Simples MM : 55.52
+
+##### 5 implementações #####
+Busca Tabu : 54.47
+Busca Local Randomizada : 60.96
+Construção Repetida : 55.19
+Guloso-K : 55.83
+Random Reestart : 55.03
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 55.35
+Tabu + Guloso-K : 54.52
+Tabu + Construcao Repetida : 54.90
+Random Reestart + Guloso-K : 55.40
+Construção Repetida + Guloso-K : 54.89
+Construção Repetida + Perturbação : 54.76
+
+##################################################################################################
+############################# instance: instances/lab6b_3x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 26.98
+Heurística II : 32.96
+
+##### Comparações #####
+Caminhada Aleatória : 26.84
+Busca Local Simples PM : 26.98
+Busca Local Simples MM : 26.84
+
+##### 5 implementações #####
+Busca Tabu : 26.19
+Busca Local Randomizada : 26.56
+Construção Repetida : 26.35
+Guloso-K : 26.98
+Random Reestart : 25.84
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 26.86
+Tabu + Guloso-K : 27.99
+Tabu + Construcao Repetida : 26.16
+Random Reestart + Guloso-K : 26.54
+Construção Repetida + Guloso-K : 26.55
+Construção Repetida + Perturbação : 26.24
+
+##################################################################################################
+############################# instance: instances/lab6b_3x20.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 10.47
+Heurística II : 12.13
+
+##### Comparações #####
+Caminhada Aleatória : 10.40
+Busca Local Simples PM : 10.47
+Busca Local Simples MM : 10.47
+
+##### 5 implementações #####
+Busca Tabu : 9.39
+Busca Local Randomizada : 11.10
+Construção Repetida : 9.21
+Guloso-K : 10.47
+Random Reestart : 9.27
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 10.57
+Tabu + Guloso-K : 11.16
+Tabu + Construcao Repetida : 9.17
+Random Reestart + Guloso-K : 9.81
+Construção Repetida + Guloso-K : 9.28
+Construção Repetida + Perturbação : 9.25
+
+##################################################################################################
+############################# instance: instances/lab6b_4x0.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 47.12
+Heurística II : 60.55
+
+##### Comparações #####
+Caminhada Aleatória : 46.32
+Busca Local Simples PM : 46.98
+Busca Local Simples MM : 46.15
+
+##### 5 implementações #####
+Busca Tabu : 43.98
+Busca Local Randomizada : 50.33
+Construção Repetida : 44.98
+Guloso-K : 47.12
+Random Reestart : 45.20
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 44.00
+Tabu + Guloso-K : 44.95
+Tabu + Construcao Repetida : 44.03
+Random Reestart + Guloso-K : 45.85
+Construção Repetida + Guloso-K : 45.50
+Construção Repetida + Perturbação : 45.27
+
+##################################################################################################
+############################# instance: instances/lab6b_4x10.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 21.72
+Heurística II : 28.40
+
+##### Comparações #####
+Caminhada Aleatória : 21.47
+Busca Local Simples PM : 21.47
+Busca Local Simples MM : 21.57
+
+##### 5 implementações #####
+Busca Tabu : 20.47
+Busca Local Randomizada : 21.90
+Construção Repetida : 20.37
+Guloso-K : 21.72
+Random Reestart : 20.57
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 20.12
+Tabu + Guloso-K : 21.85
+Tabu + Construcao Repetida : 19.65
+Random Reestart + Guloso-K : 20.62
+Construção Repetida + Guloso-K : 20.72
+Construção Repetida + Perturbação : 20.62
+
+##################################################################################################
+############################# instance: instances/lab6b_4x20.txt ##################################
+
+##### Heuristicas Construtivas #####
+Heurística I : 7.75
+Heurística II : 10.30
+
+##### Comparações #####
+Caminhada Aleatória : 7.78
+Busca Local Simples PM : 7.75
+Busca Local Simples MM : 8.08
+
+##### 5 implementações #####
+Busca Tabu : 7.48
+Busca Local Randomizada : 9.10
+Construção Repetida : 7.03
+Guloso-K : 7.75
+Random Reestart : 6.75
+
+##### 6 algoritmos hibridos #####
+"Auto-Tabu" : 7.35
+Tabu + Guloso-K : 8.00
+Tabu + Construcao Repetida : 6.98
+Random Reestart + Guloso-K : 7.58
+Construção Repetida + Guloso-K : 7.13
+Construção Repetida + Perturbação : 7.50
