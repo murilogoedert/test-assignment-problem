@@ -52,8 +52,6 @@ destas implemeta\c c\~oes
 \begin{palchaves}
 Aloca\c c\~ao de testes, Metaheur\'isticas, Problemas de otimiza\c c\~ao.
 
-\bigskip
-\noindent{T\'opicos (indique, em ordem de PRIORIDADE, o(s) t\'opicos(s) de seu artigo) }
 \end{palchaves}
 
 
@@ -71,8 +69,6 @@ of these implements.
 \begin{keywords}
 Test-Assignment. Metaheuristics. Optimization problems.
 
-\bigskip
-\noindent{Paper topics (indicate in order of PRIORITY the paper topic(s))}
 \end{keywords}
 
  
@@ -93,39 +89,20 @@ abordado anteriormente ser\'a definido pela jun\c c\~ao do peso da distancia ent
 Este problema foi introduzido inicialmente Duives~\citep{duives:13}. para melhorar essa distribui\c c\~ao de testes aplicados na Universidade de Bologna. A partir de seu estudo inicial foi demonstrado que o 
 problema pode ser classificado como NP-Dif\'icil, e o formulou o problema como um programa quadr\'atico bin\'ario n\~ao convexo.
 
-\section{Submiss\~ao do Texto Completo}
+\section{Abordagens tradicionais}
 
-Ap\'os cadastrar o artigo, o autor \'e convidado a carregar para o sistema de submiss\~ao um arquivo 
-de termina\-\c c\~ao DOC ou PDF, com o texto completo. 
-A primeira p\'agina desse manuscrito deve conter o t\'itulo do artigo coincidindo exatamente com o informado quando do cadastramento. 
-Deve, tamb\'em, incluir novamente os resumos e palavras-chave em portugu\^es ou espanhol e ingl\^es, e o(s) t\'opico(s) organizado(s) 
-em ordem de prioridade, mas \textbf{n\~ao pode incluir nomes de autores}.
+Inicialmente \'e foi implementado as abordagens tracinonais para que sej\'a validado se quais resultados poss\'iveis antes de se ter que aplicar heur\'isticas constrututivas. As abordagens iniciais ecolhidas foram \textbf{busca local randomizada}, \textbf{busca tabu} e  \textbf{reinicio aleat\'orio}. Todas essas abordagens tem como objetivo sempre fazer uma an\'alise a fim de encontrar os melhores vizinhos que no contexto do problema seriam os com provas mais diferentes como tamb\'em a distancia entre eles.
 
-Este manuscrito ser\'a disponibilizado para o exame pelos revisores, que ter\~ao tamb\'em acesso
- \`as informa\c c\~oes do cadastro, exceto as referentes aos nomes e institui\c c\~oes dos autores. 
-Uma vez aceito o artigo, os autores ser\~ao chamados a encaminhar \textbf{vers\~ao final} com a p\'agina inicial completa, isto \'e, com autores, institui\c c\~oes, resumo de no m\'aximo 150 palavras, 3 palavras-chave, t\'opicos, \textit{abstract}, \textit{keywords} e \textit{paper topics} .
+\section{ Heur\'isticas Constrututivas}
 
-As p\'aginas deste texto n\~ao devem vir numeradas, tanto no caso de arquivo enviado quando da submiss\~ao quanto no caso do arquivo com a vers\~ao final do artigo aceito. 
-A numera\c c\~ao ser\'a feita posteriormente para o conjunto de todos os artigos.
-\textbf{Cabe\c calhos e rodap\'es devem ser deixados em branco}.
+Em seguida foi implementa novas abordagens utilizando heur\'isticas constrututivas, as abordagens escolhidas foram \textbf{constru\c c\~ao repetida}, e utilizando \textbf{algoritmos semi-gulosos: guloso-k e guloso-$\alpha$}. Nestas abordagens \'e feito um ranqueamento entre as melhores op\c c\~oes encontradas a fim de que o programa n\~ao acabe descartando uma solu\c c\~ao melhor. 
 
+\section{ An\'alises dos Resultados }
 
-\section{ Instru\c c\~oes de Formata\c c\~ao}
+\section{ Mix de abordagens }
+Ap\'os a implenta\c c\~a das abordagens anteriores nesta se\c c\~a ser\'a implementado algumas implementa\c c\~oes onde misturamos mais de uma abordagem a fim de que ap\'os a primeira abordagem encontrar uma solu\c c\~ao boa a segunda abordagem possa pegar a solu\c c\~a e melhora-l\'a ainda mais. Um exemplo onde est\'a mistura pode ser ben\'efica \'e na busca tabu visto que utiliza de uma solu\c c\~ao aleat\'oria para como seu estado incial, caso essa solu\c c\~ao inicial seja boa vinda de alguma outra abordagem a busca ter\'a a aportunidade de melhorar ainda mais este resultado.
 
-
-Os trabalhos completos devem ter \textbf{no m\'aximo 12 p\'aginas}, inclu\'idos neste limite: a primeira p\'agina com resumo, texto, tabelas, gr\'aficos, agradecimentos e refer\^encias.
-
-Os textos devem utilizar p\'aginas de tamanho \textbf{A4} (29,7 x 21,0 cm) com \textbf{margem superior de 3,3 cm, inferior de 2,5 cm e laterais de 2,9 cm}.
- Devem ser escritos em coluna \'unica, com fonte \textbf{\textit{Times New Roman} 11}. 
-
-
-
-\section{ Estilo das Cita\c c\~oes}
-
-
-As cita\c c\~oes no texto devem estar entre colchetes e conter  os \'ultimos sobrenomes dos autores~\citep{silva:99}, no caso de um ou dois autores, e o \'ultimo sobrenome seguido de "et al." no caso de mais de dois autores, seguidos do \textbf{ano da publica\c c\~ao}, como por exemplo,~\citep{anna:06},~\citep{gates:03}, ~\citep{smith:02}, ~\citep{duives:13}, ~\citep{pele:04}, ~\citep{web:16}.
-As refer\^encias no final do texto devem estar em ordem alfab\'etica do \'ultimo sobrenome do primeiro autor. 
-
+\section{ Conclus\~ao }
 
 ~\\
 \bibliographystyle{sbpo}
