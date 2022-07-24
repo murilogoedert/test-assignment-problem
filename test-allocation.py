@@ -740,9 +740,9 @@ def tabuAutoTenure(solucao=False,
                 cycleCount = 0
 
             if doPlot:
-                realSol = obj#objective(removeEmptyDesks(sol))
+                realSol = objective(removeEmptyDesks(sol))
                 dataY.append(realSol)
-                dataX.append(i)
+                dataX.append(iterCount)
 
             if obj < bestValue:
                 bestValue = obj
@@ -810,23 +810,4 @@ def randomRestartComGulosoK(solucao = False, reestarts=10, doPlot = False):
     return removeEmptyDesks(bestSolution)
 
 
-data = []
-data.append(('lab3_2x20', 21.94))
-data.append(('lab6b_2x20', 8.52))
-data.append(('lab1_2x5', 5.58))
-data.append(('lab1_2x10', 1.22))
-data.append(('lab2_2x20', 14.11))
-data.append(('lab2_3x20', 10.7))
-
-
-
-for tup in data:
-    _instanceFile = 'instances/' + tup[0] + '.txt'
-
-    print(tup[0])
-    sol = tabuComConstrucaoRepetida()
-    tcr = objective(sol)
-    print('tcr: ' + str(tcr / tup[1] - 1))
-    print('val: ' + str(tcr))
-    print(sol)
-
+testInstance()
