@@ -1,5 +1,3 @@
-from hashlib import md5
-from mimetypes import init
 import sys, re, random, time
 from os import walk
 import matplotlib.pyplot as plt
@@ -16,6 +14,11 @@ _instanceFile = 'instances/lab1_2x0.txt'
 
 
 _maxIterations = 700
+_maxTime = 40
+
+
+# _stop_condition = 'iterations'
+_stop_condition = 'time'
 
 
 def readInstance(instance=False):
@@ -405,19 +408,29 @@ def buscaLocalSimplesPM(solucao=False):
 
     value = objective(solucao)
     bestSolution = solucao
+    melhorou = False
+    if _stop_condition == 'iterations':
+        for i in range(_maxIterations):
+            vizinhos = geraVizinhancaTrocaProvas(solucao)
+            for vizinho in vizinhos:
+                obj = objective(vizinho)
+                if (obj < value):
+                    value = obj
+                    melhorou = True
+                    bestSolution = vizinho
 
-    for i in range(_maxIterations):
-        melhorou = False
-        vizinhos = geraVizinhancaTrocaProvas(solucao)
-        for vizinho in vizinhos:
-            obj = objective(vizinho)
-            if (obj < value):
-                value = obj
-                melhorou = True
-                bestSolution = vizinho
-
-        if melhorou:
-            break
+            if melhorou:
+                break
+    else:
+        firstTime = time.time()
+        while time.time() - firstTime < _maxTime:
+            vizinhos = geraVizinhancaTrocaProvas(solucao)
+            for vizinho in vizinhos:
+                obj = objective(vizinho)
+                if (obj < value):
+                    value = obj
+                    bestSolution = vizinho
+                    break
 
     return removeEmptyDesks(bestSolution)
 
@@ -494,17 +507,31 @@ def caminhadaAleatoria(solucao=False):
 
     bestValue = objective(sol)
 
-    for i in range(_maxIterations):
-        if random.randint(0, 1) == 1:
-            newSol = perturbaSolucaoSwapIndices(sol)
-        else:
-            newSol = perturbaSolucaoSwapTest(sol)
+    if _stop_condition == 'iterations':
+        for i in range(_maxIterations):
+            if random.randint(0, 1) == 1:
+                newSol = perturbaSolucaoSwapIndices(sol)
+            else:
+                newSol = perturbaSolucaoSwapTest(sol)
 
-        obj = objective(newSol)
+            obj = objective(newSol)
 
-        if (obj < bestValue):
-            sol = newSol
-            bestValue = obj
+            if (obj < bestValue):
+                sol = newSol
+                bestValue = obj
+    else:
+        firstTime = time.time()
+        while time.time() - firstTime < _maxTime:
+            if random.randint(0, 1) == 1:
+                newSol = perturbaSolucaoSwapIndices(sol)
+            else:
+                newSol = perturbaSolucaoSwapTest(sol)
+
+            obj = objective(newSol)
+
+            if (obj < bestValue):
+                sol = newSol
+                bestValue = obj
 
     return removeEmptyDesks(sol)
 
@@ -517,15 +544,27 @@ def buscaLocalRandomizada(p=0, solucao=False):
     bestSolution = solucao
     concumbente = solucao
 
-    for i in range(_maxIterations):
-        r = random.randint(0, 1)
-        if r <= p:
-            concumbente = perturbaSolucaoSwapIndices(concumbente)
-        else:
-            concumbente = estrategiaMelhorVizinhoTrocaIndices(concumbente)
+    if _stop_condition == 'iterations':
+        for i in range(_maxIterations):
+            r = random.randint(0, 1)
+            if r <= p:
+                concumbente = perturbaSolucaoSwapIndices(concumbente)
+            else:
+                concumbente = estrategiaMelhorVizinhoTrocaIndices(concumbente)
 
-        if (objective(concumbente) < bestValue):
-            bestSolution = concumbente
+            if (objective(concumbente) < bestValue):
+                bestSolution = concumbente
+    else:
+        firstTime = time.time()
+        while time.time() - firstTime < _maxTime:
+            r = random.randint(0, 1)
+            if r <= p:
+                concumbente = perturbaSolucaoSwapIndices(concumbente)
+            else:
+                concumbente = estrategiaMelhorVizinhoTrocaIndices(concumbente)
+
+            if (objective(concumbente) < bestValue):
+                bestSolution = concumbente
 
     return removeEmptyDesks(bestSolution)
 
@@ -543,17 +582,34 @@ def buscaTabu(solucao=False, tabuTenure=5, doPlot=False):
     bestValue = objective(sol)
     tabuTable = [0 for i in range(_numDesks)]
 
-    for i in range(_maxIterations):
-        sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, i, bestValue)
-        obj = objective(sol)
+    if _stop_condition == 'iterations':
+        for i in range(_maxIterations):
+            sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, i, bestValue)
+            obj = objective(sol)
 
-        if doPlot:
-            dataY.append(objective(removeEmptyDesks((sol))))
-            dataX.append(i)
+            if doPlot:
+                dataY.append(objective(removeEmptyDesks((sol))))
+                dataX.append(i)
 
-        if obj < bestValue:
-            bestValue = obj
-            bestSolution = sol
+            if obj < bestValue:
+                bestValue = obj
+                bestSolution = sol
+    else:
+        firstTime = time.time()
+        iterCount = 0
+        while time.time() - firstTime < _maxTime:
+            sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, iterCount, bestValue)
+            obj = objective(sol)
+
+            if doPlot:
+                dataY.append(objective(removeEmptyDesks((sol))))
+                dataX.append(iterCount)
+
+            if obj < bestValue:
+                bestValue = obj
+                bestSolution = sol
+
+            iterCount += 1
 
     if doPlot:
         plt.plot(dataX, dataY)
@@ -633,40 +689,75 @@ def tabuAutoTenure(solucao=False,
 
     min = bestValue
     solMin = initialSolution
-    initialValue = bestValue
     cycleCount = 0
-    bestPoints = []
 
-    for i in range(_maxIterations):
-        cycleCount += 1
-        sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, i,
+    if _stop_condition == 'iterations':
+        for i in range(_maxIterations):
+            cycleCount += 1
+            sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, i,
                                              bestValue)
-        obj = objective(sol)
+            obj = objective(sol)
 
-        #atualiza os minimos, quando atualiza, zera o contador
-        #de ciclos, permitindo mais rodadas sem atualizar a tenure
-        if obj < min:
-            min = obj
-            solMin = sol
-            cycleCount = 0
-
-        if doPlot:
-            realSol = obj#objective(removeEmptyDesks(sol))
-            dataY.append(realSol)
-            dataX.append(i)
-
-        if obj < bestValue:
-            bestValue = obj
-            bestSolution = sol
-        else:
-            if cycleCount >= cycleRange:
-                tabuTenure += tenureIncrement
+            #atualiza os minimos, quando atualiza, zera o contador
+            #de ciclos, permitindo mais rodadas sem atualizar a tenure
+            if obj < min:
+                min = obj
+                solMin = sol
                 cycleCount = 0
 
-        if obj > min and ((100 * obj) / min) - 100 >= cutRange:
-            tabuTenure = initialTenure
-            cycleCount = 0
-            sol = perturbaSolucaoSwapIndices(solMin, qtd=2)
+            if doPlot:
+                realSol = obj#objective(removeEmptyDesks(sol))
+                dataY.append(realSol)
+                dataX.append(i)
+
+            if obj < bestValue:
+                bestValue = obj
+                bestSolution = sol
+            else:
+                if cycleCount >= cycleRange:
+                    tabuTenure += tenureIncrement
+                    cycleCount = 0
+
+            if obj > min and ((100 * obj) / min) - 100 >= cutRange:
+                tabuTenure = initialTenure
+                cycleCount = 0
+                sol = perturbaSolucaoSwapIndices(solMin, qtd=2)
+
+    else:
+        firstTime = time.time()
+        iterCount = 0
+        while time.time() - firstTime  < _maxTime:
+            cycleCount += 1
+            sol = estrategiaMelhorVizinhoNaoTabu(sol, tabuTable, tabuTenure, iterCount,
+                                             bestValue)
+            obj = objective(sol)
+
+            #atualiza os minimos, quando atualiza, zera o contador
+            #de ciclos, permitindo mais rodadas sem atualizar a tenure
+            if obj < min:
+                min = obj
+                solMin = sol
+                cycleCount = 0
+
+            if doPlot:
+                realSol = obj#objective(removeEmptyDesks(sol))
+                dataY.append(realSol)
+                dataX.append(i)
+
+            if obj < bestValue:
+                bestValue = obj
+                bestSolution = sol
+            else:
+                if cycleCount >= cycleRange:
+                    tabuTenure += tenureIncrement
+                    cycleCount = 0
+
+            if obj > min and ((100 * obj) / min) - 100 >= cutRange:
+                tabuTenure = initialTenure
+                cycleCount = 0
+                sol = perturbaSolucaoSwapIndices(solMin, qtd=2)
+            
+            iterCount += 1
 
     if doPlot:
         plt.plot(dataX, dataY)
