@@ -1,4 +1,4 @@
-# test-allocation-problem
+# test-assignment-problem
 Repositório para o trabalho da Diciplina 55MQU - UDESC
 
 
